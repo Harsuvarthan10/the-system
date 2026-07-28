@@ -65,11 +65,23 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .lb-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);margin-top:2px;}
 .lb-rank{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:bold;padding:3px 7px;border:1px solid var(--accent);background:rgba(74,168,255,.06);}
 .lb-lvl{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);font-weight:bold;text-align:right;}
-.tabs{display:flex;gap:8px;padding:12px 16px}.tab{flex:1;text-align:center;padding:10px 4px;font-family:Orbitron,sans-serif;font-size:10.5px;letter-spacing:1.5px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);cursor:pointer;user-select:none}.tab.active{color:var(--accent);border-color:var(--border-bright);background:linear-gradient(180deg,rgba(74,168,255,.12),rgba(74,168,255,.02));box-shadow:0 0 16px rgba(74,168,255,.15) inset}.content{flex:1;padding:6px 16px 40px}.panel{padding:16px;margin-bottom:14px;position:relative}.panel-title{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin:0 0 12px}.panel-title b{color:var(--accent)}
+.tabs{display:flex;gap:4px;padding:12px 16px}.tab{flex:1;text-align:center;padding:10px 2px;font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:1px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);cursor:pointer;user-select:none}.tab.active{color:var(--accent);border-color:var(--border-bright);background:linear-gradient(180deg,rgba(74,168,255,.12),rgba(74,168,255,.02));box-shadow:0 0 16px rgba(74,168,255,.15) inset}.content{flex:1;padding:6px 16px 40px}.panel{padding:16px;margin-bottom:14px;position:relative}.panel-title{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin:0 0 12px}.panel-title b{color:var(--accent)}
 .levelrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}.levelrow .lvl{font-family:Orbitron,sans-serif;font-size:32px;font-weight:900;color:var(--text);text-shadow:0 0 20px rgba(74,168,255,.35);transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.4s ease, text-shadow 0.4s ease;}.levelrow .lvl.lvl-pop{color:var(--gold);text-shadow:0 0 40px var(--gold), 0 0 15px #fff;transform:scale(1.35);}.levelrow .lvl span:first-child{font-size:13px;color:var(--text-dim);letter-spacing:2px;margin-right:6px;font-family:Rajdhani,sans-serif;font-weight:600}.levelrow .name{font-size:15px;color:var(--text-dim);font-weight:600}.xpbar-wrap{margin-top:6px}.xpbar-label{display:flex;justify-content:space-between;font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text-dim);margin-bottom:5px}.xpbar{height:10px;background:var(--panel-2);border:1px solid var(--border);overflow:hidden}.xpbar-fill{height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));box-shadow:0 0 12px rgba(74,168,255,.6);transition:width .05s linear}
 .deadlinerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}.deadline-label{font-size:12px;color:var(--text-dim)}.deadline-label b{color:var(--text);display:block;font-size:13px;margin-top:2px}.deadline-clock{font-family:JetBrains Mono,monospace;font-size:18px;font-weight:600;color:var(--accent);text-shadow:0 0 10px rgba(74,168,255,.4);text-align:right}.deadline-clock.overdue{color:var(--danger)}.progress-count{font-family:JetBrains Mono,monospace;font-size:13px;color:var(--text-dim);margin-bottom:12px}.progress-count b{color:var(--success)}.tinyquest{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.tinyquest:last-child{border-bottom:none}.tinyquest .icon{font-size:16px;width:22px;text-align:center}.tinyquest .info{flex:1;min-width:0}.tinyquest .tn{font-size:13.5px;color:var(--text);font-weight:600}.tinyquest.done .tn{color:var(--text-dim)}.tinyquest .tmeta{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:2px}.tinyquest .tmeta b{color:var(--accent)}.tinyquest .tag-done{font-size:11px;color:var(--success);font-family:JetBrains Mono,monospace;flex-shrink:0}
 .qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.addbtn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1px;color:var(--accent);border:1px solid var(--border-bright);padding:7px 12px;cursor:pointer;background:rgba(74,168,255,.06)}.quest{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:9px;background:var(--panel-2);border:1px solid var(--border);border-left:3px solid var(--accent-dim);position:relative}.quest.done{border-left-color:var(--success);opacity:.7}.quest .icon{font-size:20px;width:26px;text-align:center}.quest .info{flex:1;min-width:0}.quest .qname{font-size:15px;font-weight:600;color:var(--text)}.quest.done .qname{text-decoration:line-through;color:var(--text-dim)}.quest .qmeta,.quest .qdays{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:3px}.quest .qmeta b{color:var(--accent);font-weight:600}.quest .streak{font-size:10.5px;color:var(--gold);margin-left:6px}.check{width:24px;height:24px;border:2px solid var(--border-bright);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:transparent;font-weight:700}.quest.done .check{background:var(--success);border-color:var(--success);color:#05070c}.quest.locked .check{cursor:not-allowed;background:var(--panel);border-color:var(--border);color:var(--text-faint)}.qedit,.qremove{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1px solid var(--border)}.qedit{color:var(--accent);background:rgba(74,168,255,.06)}.qremove{color:var(--danger);background:rgba(255,84,104,.06)}.emptystate{text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13px}
 .logitem{padding:11px 12px;border-left:2px solid var(--border-bright);margin-bottom:8px;background:var(--panel-2)}.logitem .t{font-size:13.5px;color:var(--text)}.logitem .d{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-faint);margin-top:3px}.logitem.penalty{border-left-color:var(--danger)}.logitem.penalty .t{color:var(--danger)}.logitem.levelup{border-left-color:var(--gold)}.logitem.levelup .t{color:var(--gold)}.logactions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.logbtn{flex:1;min-width:45%;text-align:center;padding:10px 4px;font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:1px;border:1px solid var(--border-bright);cursor:pointer}.logbtn.reset{color:var(--danger);border-color:var(--danger);background:rgba(255,84,104,.06)}.logbtn.switch{color:var(--accent);background:rgba(74,168,255,.06)}.logbtn.backup{color:var(--success);border-color:var(--success);background:rgba(61,220,151,.06)}
+
+/* GUILD CHAT STYLES */
+.chat-container{display:flex;flex-direction:column;height:65vh;background:var(--panel-2);border:1px solid var(--border);padding:10px;margin-bottom:10px;}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;}
+.chat-msg{background:rgba(74,168,255,.05);border:1px solid var(--border);padding:8px 10px;font-size:13.5px;}
+.chat-msg-header{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);margin-bottom:4px;}
+.chat-msg-user{color:var(--accent);font-weight:bold;}
+.chat-msg-text{color:var(--text);word-break:break-word;line-height:1.4;}
+.chat-input-row{display:flex;gap:6px;margin-top:8px;}
+.chat-input{flex:1;padding:10px;background:var(--panel);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:14px;outline:none;}
+.chat-send{padding:0 16px;font-family:Orbitron,sans-serif;font-size:11px;background:var(--accent);color:#05070c;border:none;cursor:pointer;font-weight:bold;}
+
 .overlay{position:fixed;inset:0;background:rgba(2,4,10,.75);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}.overlay.show{opacity:1;pointer-events:auto}.syswin{width:100%;max-width:360px;background:linear-gradient(180deg,rgba(12,17,32,.98),rgba(8,12,22,.98));border:1px solid var(--accent);box-shadow:0 0 0 1px rgba(74,168,255,.15),0 0 40px rgba(74,168,255,.25);padding:22px 20px;transform:scale(.9);transition:transform .25s}.overlay.show .syswin{transform:scale(1)}.syswin.gold{border-color:var(--gold)}.syswin.danger{border-color:var(--danger)}.syswin-tag{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:3px;color:var(--text-faint);text-align:center;margin-bottom:10px}.syswin-title{font-family:Orbitron,sans-serif;font-size:22px;font-weight:900;text-align:center;color:var(--accent);margin-bottom:14px;letter-spacing:1px}.syswin.gold .syswin-title{color:var(--gold)}.syswin.danger .syswin-title{color:var(--danger)}.syswin-body{font-size:14.5px;color:var(--text);line-height:1.6;text-align:center;margin-bottom:16px}.syswin-body b{color:var(--accent);font-family:JetBrains Mono,monospace}.syswin-close{display:block;width:100%;text-align:center;padding:11px;margin-top:4px;font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:2px;border:1px solid var(--border-bright);color:var(--accent);background:rgba(74,168,255,.06);cursor:pointer;user-select:none}.syswin-close.danger{color:var(--danger)}.syswin-close.ok{color:var(--success);border-color:var(--success)}.template{display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:7px;background:var(--panel-2);border:1px solid var(--border);cursor:pointer}.template .icon{font-size:18px;width:24px;text-align:center}.template .tn{font-size:14px;color:var(--text);font-weight:600;flex:1}.template .ts{font-size:10px;color:var(--text-faint);font-family:JetBrains Mono,monospace}.modal-scroll{max-height:50vh;overflow-y:auto;margin:4px 0 12px}::-webkit-scrollbar{width:0;height:0}
 .heatmap-grid{display:flex;justify-content:space-between;gap:6px;margin-top:10px;}
 .heatmap-day{flex:1;text-align:center;background:var(--panel-2);border:1px solid var(--border);padding:8px 2px;border-radius:2px;}
@@ -119,6 +131,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 <div class="tab" data-tab="quests">QUESTS</div>
 <div class="tab" data-tab="log">LOG</div>
 <div class="tab" data-tab="daily">DAILY</div>
+<div class="tab" data-tab="guild">GUILD</div>
 </div>
 <div class="content">
 <div class="tabpanel" id="tab-status">
@@ -142,6 +155,21 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
     <div style="display:flex;gap:10px;margin-top:12px"><div class="syswin-close ok" id="saveDailyJournal" style="flex:1">SAVE TODAY</div><div class="syswin-close" id="clearDailyJournal" style="flex:1">CLEAR</div></div>
   </div>
   <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">JOURNAL <b>HISTORY</b></p><div id="dailyJournalHistory"></div></div>
+</div>
+<div class="tabpanel" id="tab-guild" style="display:none">
+  <div class="panel hud-frame">
+    <div class="c3"></div><div class="c4"></div>
+    <p class="panel-title">GLOBAL HUNTER <b>GUILD CHAT</b></p>
+    <div class="chat-container">
+      <div class="chat-messages" id="chatMessages">
+        <div class="emptystate">Connecting to Guild network...</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" class="chat-input" id="chatInput" placeholder="Broadcast message to all hunters..." maxlength="250" autocomplete="off">
+        <div class="chat-send" id="chatSendBtn">SEND</div>
+      </div>
+    </div>
+  </div>
 </div>
 </div></div>
 <div class="overlay" id="sysOverlay"><div class="syswin hud-frame" id="sysWin"><div class="c3"></div><div class="c4"></div><div class="syswin-tag" id="sysTag">[ SYSTEM ]</div><div class="syswin-title" id="sysTitle">QUEST COMPLETE</div><div class="syswin-body" id="sysBody"></div><div id="sysActions"><div class="syswin-close" id="sysClose">CONFIRM</div></div></div></div>
@@ -176,7 +204,7 @@ const TEMPLATES=[
 {name:'Stretch / Mobility',icon:'🤸'},{name:'Cold Discipline',icon:'❄️'},{name:'Clean Eating',icon:'🥗'},{name:'Social / Outreach',icon:'🗣️'}];
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
-let isAdminMode=false, unsubHunter = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false;
+let isAdminMode=false, unsubHunter = null, unsubChat = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false, chatMessagesCache = [];
 
 /* SPARK PARTICLES EFFECT */
 function spawnParticles(x, y) {
@@ -364,7 +392,7 @@ function loadProfile(name, password=""){
 
 function boot(){loadRegistry();const u=localStorage.getItem(CURRENT_USER_KEY);if(u){currentUser=u;loadProfile(u);showApp()}else showLogin()}
 function showLogin(h=''){if(tickHandle){clearInterval(tickHandle);tickHandle=null}document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('loginHint').textContent=h;document.getElementById('loginInput').value='';document.getElementById('passwordInput').value='';renderHunterList()}
-function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';requestNotificationPermission();render();if(tickHandle)clearInterval(tickHandle);tickHandle=setInterval(tick,1000)}
+function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';requestNotificationPermission();render();if(tickHandle)clearInterval(tickHandle);tickHandle=setInterval(tick,1000);initChatListener();}
 
 function loginWithName(n, pass){
   n=n.trim(); pass=pass.trim();
@@ -377,7 +405,7 @@ function loginWithName(n, pass){
   currentUser=n; localStorage.setItem(CURRENT_USER_KEY,n); loadProfile(n, pass); showApp();
 }
 
-function logoutUser(){ if(unsubHunter) { unsubHunter(); unsubHunter = null; } localStorage.removeItem(CURRENT_USER_KEY); currentUser=null; data=null; showLogin('Switched hunter. Enter name and password.'); }
+function logoutUser(){ if(unsubHunter) { unsubHunter(); unsubHunter = null; } if(unsubChat) { unsubChat(); unsubChat = null; } localStorage.removeItem(CURRENT_USER_KEY); currentUser=null; data=null; showLogin('Switched hunter. Enter name and password.'); }
 
 function resetTodayData(){
   if(!data) return; const t = todayStr(); let todayXPGained = 0;
@@ -401,12 +429,7 @@ function applyDailyReset(){
 
 function gainXP(a){
   data.xp += a; let up = false, oldRank = rankFor(data.level).r;
-  if(data.xp >= 100){ 
-    data.xp = 0; 
-    data.level++; 
-    data.lastLeveledDate = todayStr(); 
-    up = true; 
-  }
+  if(data.xp >= 100){ data.xp = 0; data.level++; data.lastLeveledDate = todayStr(); up = true; }
   return {leveledUp: up, newRank: rankFor(data.level).r !== oldRank ? rankFor(data.level).r : null};
 }
 
@@ -434,8 +457,6 @@ function completeQuest(id, evt){
   setTimeout(() => document.body.classList.remove('shake-active'), 400);
 
   const r = gainXP(q.xp);
-  
-  // சின்க் ஆகி லெவல் மாறிய உடனே uiLevel-ஐயும் டேட்டாவிற்கு ஏற்ப அட்ஜஸ்ட் செய்கிறோம்
   uiLevel = data.level;
 
   data.log.unshift({date:todayStr(),text:`Completed "${q.name}" — +${q.xp} XP`,type:'normal'}); data.log=data.log.slice(0,40);
@@ -444,15 +465,11 @@ function completeQuest(id, evt){
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
-    
-    // குவெஸ்ட் முடிக்கும்போதே உடனடி Level Up அனிமேஷன் மற்றும் பாப்-அப் வர வழி செய்கிறோம்
     setTimeout(() => {
-      const lvlWrap = document.getElementById('lvlWrap'); 
-      if(lvlWrap) lvlWrap.classList.add('lvl-pop');
+      const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
       playSound('levelup');
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
-
       const newRankObj = rankFor(data.level);
       showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! All quests cleared and power increased!` });
       setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
@@ -555,6 +572,58 @@ function renderDailyJournal(){
   el.querySelectorAll('[data-edit-j]').forEach(btn => btn.onclick = () => loadDailyJournal(btn.dataset.editJ)); el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
 }
 
+/* GUILD CHAT FUNCTIONS */
+function initChatListener(){
+  if(!db) return;
+  if(unsubChat) unsubChat();
+  unsubChat = db.collection("guild_chat").orderBy("timestamp", "asc").limit(50).onSnapshot(snapshot => {
+    chatMessagesCache = [];
+    snapshot.forEach(doc => { chatMessagesCache.push(doc.data()); });
+    renderChatMessages();
+  }, err => console.log(err));
+}
+
+function sendGuildMessage(){
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if(!text || !currentUser || !data) return;
+  
+  if(!db){ alert("Firebase offline. Chat is unavailable."); return; }
+  
+  const msgData = {
+    sender: currentUser,
+    level: data.level || 1,
+    text: text,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  db.collection("guild_chat").add(msgData).then(() => {
+    input.value = '';
+    playSound('quest');
+  }).catch(err => {
+    alert("Failed to send message.");
+  });
+}
+
+function renderChatMessages(){
+  const container = document.getElementById('chatMessages');
+  if(!container) return;
+  if(!chatMessagesCache.length){
+    container.innerHTML = '<div class="emptystate">No messages in Guild yet. Say hello!</div>';
+    return;
+  }
+  container.innerHTML = chatMessagesCache.map(m => {
+    let rObj = rankFor(m.level || 1);
+    return `<div class="chat-msg">
+      <div class="chat-msg-header">
+        <div><span class="chat-msg-user">${escapeHtml(m.sender)}</span> <span style="color:${rObj.color}; font-size:9px; margin-left:4px;">[${rObj.r} LV ${m.level || 1}]</span></div>
+      </div>
+      <div class="chat-msg-text">${escapeHtml(m.text)}</div>
+    </div>`;
+  }).join('');
+  container.scrollTop = container.scrollHeight;
+}
+
 function renderUI(){ document.getElementById('playerName').textContent=data.playerName; document.getElementById('userNameTop').textContent=data.playerName; updateXPBarUI(data.level, data.xp, 100); renderStatus(); renderHeatmap(); }
 function render(){ renderUI(); renderQuests(); renderLog(); renderDailyJournal(); animateXPOnStatusTab(); tick(); }
 function renderStatus(){const done=data.quests.filter(q=>q.completedToday).length;document.getElementById('progressCount').innerHTML=`<b>${done}</b> / ${data.quests.length} quests cleared today`;document.getElementById('statusQuestList').innerHTML=data.quests.length?data.quests.map(q=>`<div class="tinyquest ${q.completedToday?'done':''}"><div class="icon">${q.icon}</div><div class="info"><div class="tn">${escapeHtml(q.name)}</div><div class="tmeta">Started ${formatDate(q.startDate)} · Day ${daysSince(q.startDate)} · <b>${q.totalDays}</b> completed · +${q.xp} XP</div></div>${q.completedToday?'<div class="tag-done">✓ DONE</div>':''}</div>`).join(''):'<div class="emptystate">No quests assigned. Add some in the Quests tab.</div>'}
@@ -589,10 +658,14 @@ document.getElementById('importDataBtn').onclick = () => document.getElementById
 document.getElementById('importFileInput').onchange = importBackupData;
 document.getElementById('resetDataBtn').onclick=()=>{ if(confirm('Reset TODAY\'S progress for '+data.playerName+'? (Past days will be saved)')) resetTodayData(); };
 
+document.getElementById('chatSendBtn').onclick = sendGuildMessage;
+document.getElementById('chatInput').onkeydown = e => { if(e.key === 'Enter') sendGuildMessage(); };
+
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
   document.querySelectorAll('.tabpanel').forEach(x=>x.style.display='none'); document.getElementById('tab-'+t.dataset.tab).style.display='block';
   if(t.dataset.tab === 'status'){ renderUI(); animateXPOnStatusTab(); }
+  if(t.dataset.tab === 'guild'){ renderChatMessages(); }
 });
 
 boot();
