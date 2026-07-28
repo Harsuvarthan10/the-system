@@ -529,7 +529,7 @@ function tick(){
 }
 
 function showVideoPopup(){
-  const dayIndex = istNow().getDay(); // 0 = Sunday, 1 = Monday ... 6 = Saturday
+  const dayIndex = istNow().getDay(); 
   const videoUrl = WEEKLY_VIDEOS[dayIndex] || WEEKLY_VIDEOS[0];
 
   const w = document.getElementById('sysWin');
@@ -538,10 +538,9 @@ function showVideoPopup(){
   document.getElementById('sysTag').textContent = '[ SOLO LEVELING ]';
   document.getElementById('sysTitle').textContent = 'DAILY REWARD / LEVEL UP';
   
-  // Embed Video inside popup body
   document.getElementById('sysBody').innerHTML = `
     <div style="width:100%; border:1px solid var(--gold); border-radius:4px; overflow:hidden; background:#000; box-shadow:0 0 20px rgba(245,196,81,0.4);">
-      <video width="100%" height="220" autoplay controls playsinline style="display:block;">
+      <video id="popupVideo" width="100%" height="220" autoplay controls playsinline style="display:block;">
         <source src="${videoUrl}" type="video/mp4">
         Your browser does not support video playback.
       </video>
@@ -554,12 +553,22 @@ function showVideoPopup(){
   document.getElementById('sysOverlay').classList.add('show');
 }
 
+function closeSysWindow(){
+  const vid = document.getElementById('popupVideo');
+  if(vid) {
+    vid.pause();
+    vid.currentTime = 0;
+    vid.src = "";
+    vid.load();
+  }
+  document.getElementById('sysOverlay').classList.remove('show');
+}
+
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
 
   const allDone = data.quests.length > 0 && data.quests.every(q => q.completedToday);
 
-  // IF ALL QUESTS DONE & LEVEL UP PENDING, SHOW VIDEO POPUP FOR TODAY
   if(levelUpPending || (allDone && uiLevel < data.level)) {
     levelUpPending = false;
     uiLevel = data.level;
@@ -573,12 +582,15 @@ function animateXPOnStatusTab(){
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-      showVideoPopup();
+      // Level up popup message first, then 2 seconds later show video popup
+      const newRankObj = rankFor(uiLevel);
+      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
       
-      setTimeout(() => { 
+      setTimeout(() => {
         if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
+        showVideoPopup();
         isAnimatingXP = false;
-      }, 1300);
+      }, 2000); // exactly 2 seconds delay
     }, 200);
     return;
   }
@@ -735,7 +747,7 @@ function renderQuests(){
 
 function renderLog(){document.getElementById('logList').innerHTML=data.log.length?data.log.map(l=>`<div class="logitem ${l.type==='penalty'?'penalty':l.type==='levelup'?'levelup':''}"><div class="t">${escapeHtml(l.text)}</div><div class="d">${l.date}</div></div>`).join(''):'<div class="emptystate">No activity yet.</div>'}
 function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.remove('gold','danger');if(o.tone)w.classList.add(o.tone);document.getElementById('sysTag').textContent=o.tag;document.getElementById('sysTitle').textContent=o.title;document.getElementById('sysBody').innerHTML=o.body;document.getElementById('sysActions').innerHTML='<div class="syswin-close" id="sysClose">CONFIRM</div>';document.getElementById('sysClose').onclick=closeSysWindow;document.getElementById('sysOverlay').classList.add('show')}
-function closeSysWindow(){document.getElementById('sysOverlay').classList.remove('show')}
+
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
