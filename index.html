@@ -401,7 +401,12 @@ function applyDailyReset(){
 
 function gainXP(a){
   data.xp += a; let up = false, oldRank = rankFor(data.level).r;
-  if(data.xp >= 100){ data.xp = 0; data.level++; data.lastLeveledDate = todayStr(); up = true; }
+  if(data.xp >= 100){ 
+    data.xp = 0; 
+    data.level++; 
+    data.lastLeveledDate = todayStr(); 
+    up = true; 
+  }
   return {leveledUp: up, newRank: rankFor(data.level).r !== oldRank ? rankFor(data.level).r : null};
 }
 
@@ -429,15 +434,32 @@ function completeQuest(id, evt){
   setTimeout(() => document.body.classList.remove('shake-active'), 400);
 
   const r = gainXP(q.xp);
+  
+  // சின்க் ஆகி லெவல் மாறிய உடனே uiLevel-ஐயும் டேட்டாவிற்கு ஏற்ப அட்ஜஸ்ட் செய்கிறோம்
+  uiLevel = data.level;
+
   data.log.unshift({date:todayStr(),text:`Completed "${q.name}" — +${q.xp} XP`,type:'normal'}); data.log=data.log.slice(0,40);
   saveData(); renderQuests(); renderStatus(); renderHeatmap();
 
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
-  }
+    
+    // குவெஸ்ட் முடிக்கும்போதே உடனடி Level Up அனிமேஷன் மற்றும் பாப்-அப் வர வழி செய்கிறோம்
+    setTimeout(() => {
+      const lvlWrap = document.getElementById('lvlWrap'); 
+      if(lvlWrap) lvlWrap.classList.add('lvl-pop');
+      playSound('levelup');
+      document.body.classList.add('shake-active');
+      setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-  showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
+      const newRankObj = rankFor(data.level);
+      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! All quests cleared and power increased!` });
+      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
+    }, 300);
+  } else {
+    showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
+  }
 }
 
 function removeQuest(id){if(!confirm('Remove this quest?'))return;data.quests=data.quests.filter(q=>q.id!==id);redistributeXP();saveData();render()}
