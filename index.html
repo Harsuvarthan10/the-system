@@ -206,9 +206,20 @@ const TEMPLATES=[
 {name:'Deep Work Block',icon:'🧠'},{name:'Sleep 7+ Hours',icon:'🌙'},{name:'Meditate / Focus',icon:'🧘'},
 {name:'Stretch / Mobility',icon:'🤸'},{name:'Cold Discipline',icon:'❄️'},{name:'Clean Eating',icon:'🥗'},{name:'Social / Outreach',icon:'🗣️'}];
 
+// 7 DAYS 7 MP4 VIDEOS (Sunday = 0 to Saturday = 6)
+const WEEKLY_VIDEOS = [
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4",    // 0: Sunday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4",    // 1: Monday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4",   // 2: Tuesday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4", // 3: Wednesday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4",  // 4: Thursday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4",    // 5: Friday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/_fire__fire__fire_Iron_Man_(Tony_Stark)Robert_Downey,Jr._Mass_Vera_Level_Tam.mp4"   // 6: Saturday
+];
+
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
 let isAdminMode=false, unsubHunter = null, unsubChat = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false, chatMessagesCache = [];
-let levelUpPending = false; // Flag to force level up popup on status tab
+let levelUpPending = false;
 
 /* SPARK PARTICLES EFFECT */
 function spawnParticles(x, y) {
@@ -473,7 +484,7 @@ function completeQuest(id, evt){
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
-    levelUpPending = true; // Flag activated!
+    levelUpPending = true; 
   }
 
   showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
@@ -517,11 +528,39 @@ function tick(){
   }
 }
 
+function showVideoPopup(){
+  const dayIndex = istNow().getDay(); // 0 = Sunday, 1 = Monday ... 6 = Saturday
+  const videoUrl = WEEKLY_VIDEOS[dayIndex] || WEEKLY_VIDEOS[0];
+
+  const w = document.getElementById('sysWin');
+  w.classList.remove('gold','danger');
+  w.classList.add('gold');
+  document.getElementById('sysTag').textContent = '[ SOLO LEVELING ]';
+  document.getElementById('sysTitle').textContent = 'DAILY REWARD / LEVEL UP';
+  
+  // Embed Video inside popup body
+  document.getElementById('sysBody').innerHTML = `
+    <div style="width:100%; border:1px solid var(--gold); border-radius:4px; overflow:hidden; background:#000; box-shadow:0 0 20px rgba(245,196,81,0.4);">
+      <video width="100%" height="220" autoplay controls playsinline style="display:block;">
+        <source src="${videoUrl}" type="video/mp4">
+        Your browser does not support video playback.
+      </video>
+    </div>
+    <div style="font-size:12px; color:var(--gold); margin-top:10px; font-family:'JetBrains Mono',monospace;">Rank updated successfully!</div>
+  `;
+
+  document.getElementById('sysActions').innerHTML = '<div class="syswin-close" id="sysClose">CLOSE</div>';
+  document.getElementById('sysClose').onclick = closeSysWindow;
+  document.getElementById('sysOverlay').classList.add('show');
+}
+
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
 
-  // CHECK PENDING LEVEL UP WHEN STATUS TAB OPENS
-  if(levelUpPending || uiLevel < data.level) {
+  const allDone = data.quests.length > 0 && data.quests.every(q => q.completedToday);
+
+  // IF ALL QUESTS DONE & LEVEL UP PENDING, SHOW VIDEO POPUP FOR TODAY
+  if(levelUpPending || (allDone && uiLevel < data.level)) {
     levelUpPending = false;
     uiLevel = data.level;
     uiXP = data.xp;
@@ -534,8 +573,7 @@ function animateXPOnStatusTab(){
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-      const newRankObj = rankFor(uiLevel);
-      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
+      showVideoPopup();
       
       setTimeout(() => { 
         if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
@@ -595,7 +633,8 @@ function renderDailyJournal(){
   ensureJournal(); if(!editingJournalDate) loadDailyJournal(todayStr()); const entries = Object.keys(data.journal).sort().reverse(); const el = document.getElementById('dailyJournalHistory');
   if(!entries.length){ el.innerHTML = '<div class="emptystate">No journal entries yet.<br>Write about your day above.</div>'; return; }
   el.innerHTML = entries.map(d => `<div class="logitem" style="position:relative;"><div style="display:flex; justify-content:space-between; align-items:center;"><div class="t" style="color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:bold;">${formatDate(d)}</div><div style="display:flex; gap:8px;"><button data-edit-j="${d}" style="background:rgba(74,168,255,.1); border:1px solid var(--border-bright); color:var(--accent); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">EDIT</button><button data-del-j="${d}" style="background:rgba(255,84,104,.1); border:1px solid var(--danger); color:var(--danger); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">DEL</button></div></div><div style="font-size:13.5px; color:var(--text-dim); line-height:1.55; margin-top:8px; white-space:pre-wrap">${escapeHtml(data.journal[d])}</div></div>`).join('');
-  el.querySelectorAll('[data-edit-j]').forEach(btn => btn.onclick = () => loadDailyJournal(btn.dataset.editJ)); el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
+  el.querySelectorAll('[data-edit-j]').forEach(btn => btn.onclick = () => loadDailyJournal(btn.dataset.editJ));
+  el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
 }
 
 /* GUILD CHAT FUNCTIONS WITH CLEAN FORMATTING */
