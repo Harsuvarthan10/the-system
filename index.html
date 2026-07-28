@@ -22,13 +22,42 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
 :root{--bg:#05070c;--panel:#0c1120;--panel-2:#0f1526;--border:#1e2c4a;--border-bright:#2f4a7a;--accent:#4aa8ff;--accent-dim:#2a5c96;--violet:#8b6bf0;--gold:#f5c451;--success:#3ddc97;--danger:#ff5468;--text:#e6edf7;--text-dim:#7d8aa3;--text-faint:#4a5670}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;padding:0}body{background:radial-gradient(ellipse 900px 500px at 50% -10%,rgba(74,168,255,.08),transparent 60%),repeating-linear-gradient(0deg,rgba(74,168,255,.025) 0,rgba(74,168,255,.025) 1px,transparent 1px,transparent 3px),var(--bg);color:var(--text);font-family:Rajdhani,sans-serif;min-height:100vh;display:flex;justify-content:center;overflow-x:hidden}.app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column}.hud-frame{position:relative;border:1px solid var(--border);background:linear-gradient(180deg,rgba(15,21,38,.9),rgba(10,14,26,.9))}.hud-frame:before,.hud-frame:after,.hud-frame .c3,.hud-frame .c4{content:'';position:absolute;width:12px;height:12px;border:2px solid var(--accent);opacity:.85}.hud-frame:before{top:-1px;left:-1px;border-right:none;border-bottom:none}.hud-frame:after{top:-1px;right:-1px;border-left:none;border-bottom:none}.hud-frame .c3{bottom:-1px;left:-1px;border-right:none;border-top:none}.hud-frame .c4{bottom:-1px;right:-1px;border-left:none;border-top:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0; transition: background-color 0.5s ease;}
+body{background:radial-gradient(ellipse 900px 500px at 50% -10%,rgba(74,168,255,.08),transparent 60%),repeating-linear-gradient(0deg,rgba(74,168,255,.025) 0,rgba(74,168,255,.025) 1px,transparent 1px,transparent 3px),var(--bg);color:var(--text);font-family:Rajdhani,sans-serif;min-height:100vh;display:flex;justify-content:center;overflow-x:hidden}
+
+/* PENALTY MODE (RED GLITCH THEME) */
+body.penalty-mode {
+  --bg: #120202; --panel: #240505; --panel-2: #360808; --border: #5c1010; --border-bright: #8a1717; --accent: #ff2a2a; --accent-dim: #961212;
+  background: radial-gradient(ellipse 900px 500px at 50% -10%,rgba(255,42,42,.15),transparent 60%),repeating-linear-gradient(0deg,rgba(255,42,42,.05) 0,rgba(255,42,42,.05) 1px,transparent 1px,transparent 3px),var(--bg);
+  animation: redPulse 2s infinite alternate;
+}
+@keyframes redPulse { from { box-shadow: inset 0 0 0px rgba(255,0,0,0); } to { box-shadow: inset 0 0 60px rgba(255,0,0,0.2); } }
+
+/* SCREEN SHAKE EFFECT */
+.shake-active { animation: sysShake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes sysShake { 
+  0% { transform: translate(1px, 1px) rotate(0deg); } 
+  20% { transform: translate(-3px, 0px) rotate(1deg); } 
+  40% { transform: translate(1px, -1px) rotate(1deg); } 
+  60% { transform: translate(-3px, 1px) rotate(0deg); } 
+  80% { transform: translate(-1px, -1px) rotate(1deg); } 
+  100% { transform: translate(1px, -2px) rotate(-1deg); } 
+}
+
+/* FIRE/SPARK PARTICLES */
+.spark { position: fixed; width: 4px; height: 4px; background: var(--accent); box-shadow: 0 0 12px var(--accent), 0 0 4px #fff; border-radius: 50%; pointer-events: none; z-index: 9999; animation: sparkAnim 0.5s ease-out forwards; }
+@keyframes sparkAnim { 0% { transform: scale(1) translate(0, 0); opacity: 1; } 100% { transform: scale(0) translate(var(--tx), var(--ty)); opacity: 0; } }
+
+.app{width:100%;max-width:480px;min-height:100vh;display:flex;flex-direction:column; transition: all 0.3s ease;}
+.hud-frame{position:relative;border:1px solid var(--border);background:linear-gradient(180deg,rgba(15,21,38,.9),rgba(10,14,26,.9)); transition: border-color 0.3s ease, background 0.3s ease;}
+body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9),rgba(20,5,5,.9)); }
+.hud-frame:before,.hud-frame:after,.hud-frame .c3,.hud-frame .c4{content:'';position:absolute;width:12px;height:12px;border:2px solid var(--accent);opacity:.85; transition: border-color 0.3s ease;}
+.hud-frame:before{top:-1px;left:-1px;border-right:none;border-bottom:none}.hud-frame:after{top:-1px;right:-1px;border-left:none;border-bottom:none}.hud-frame .c3{bottom:-1px;left:-1px;border-right:none;border-top:none}.hud-frame .c4{bottom:-1px;right:-1px;border-left:none;border-top:none}
 .loginwrap{min-height:100vh;width:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px}.loginbox{width:100%;max-width:360px;padding:28px 22px;text-align:center;margin-top:6vh}.login-tag{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:4px;color:var(--text-faint);margin-bottom:8px}.login-title{font-family:Orbitron,sans-serif;font-size:20px;font-weight:900;color:var(--accent);text-shadow:0 0 16px rgba(74,168,255,.5);letter-spacing:2px;margin-bottom:6px}.login-sub{font-size:13.5px;color:var(--text-dim);margin-bottom:22px;line-height:1.5}.login-input{width:100%;padding:13px 14px;margin-bottom:14px;background:var(--panel-2);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:16px;font-weight:600;letter-spacing:1px;outline:none;text-align:center}.login-input::placeholder{color:var(--text-faint)}.login-btn{width:100%;padding:13px;font-family:Orbitron,sans-serif;font-size:13px;letter-spacing:2px;color:#05070c;background:var(--accent);border:none;cursor:pointer;font-weight:700}.login-hint{font-size:11px;color:var(--text-faint);margin-top:14px;font-family:JetBrains Mono,monospace;min-height:14px}.hunter-list-title{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:2px;color:var(--text-faint);margin:22px 0 10px;text-align:left;display:flex;justify-content:space-between;align-items:center}.admin-toggle{font-size:9px;color:var(--accent);cursor:pointer;text-decoration:underline}.hunter-row{display:flex;align-items:center;gap:8px;padding:9px 10px;margin-bottom:7px;background:var(--panel-2);border:1px solid var(--border);text-align:left}.hr-name{flex:1;font-size:14px;font-weight:600;color:var(--text)}.hr-level{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--accent)}.hr-enter{font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:1px;color:var(--accent);border:1px solid var(--border-bright);padding:5px 8px;cursor:pointer;background:rgba(74,168,255,.06)}
 .topbar{padding:18px 16px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(74,168,255,.06),transparent)}.brand{font-family:Orbitron,sans-serif;font-weight:900;font-size:15px;letter-spacing:4px;color:var(--accent);text-shadow:0 0 14px rgba(74,168,255,.5);display:flex;align-items:center;gap:10px;}.brand span{color:var(--text-faint);font-size:10px;display:block;letter-spacing:2px;margin-top:2px;font-family:Rajdhani,sans-serif;font-weight:600}.topbar-right{display:flex;align-items:center;gap:10px}
 .usernameTop{font-size:14px;color:var(--accent);font-weight:700;text-shadow:0 0 8px rgba(74,168,255,0.4);font-family:Orbitron,sans-serif;}
 .rankchip{font-family:Orbitron,sans-serif;font-weight:700;font-size:10px;padding:4px 8px;border:1px solid var(--rank-color,var(--accent));color:var(--rank-color,var(--accent));background:rgba(74,168,255,.06);letter-spacing:1.5px;box-shadow:0 0 10px var(--rank-color,transparent);}
-
-/* ALL USERS LEADERBOARD STYLES */
 .leaderboard-list{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
 .lb-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--panel-2);border:1px solid var(--border);}
 .lb-info{flex:1;min-width:0;}
@@ -36,16 +65,12 @@
 .lb-meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);margin-top:2px;}
 .lb-rank{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:bold;padding:3px 7px;border:1px solid var(--accent);background:rgba(74,168,255,.06);}
 .lb-lvl{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);font-weight:bold;text-align:right;}
-
 .tabs{display:flex;gap:8px;padding:12px 16px}.tab{flex:1;text-align:center;padding:10px 4px;font-family:Orbitron,sans-serif;font-size:10.5px;letter-spacing:1.5px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);cursor:pointer;user-select:none}.tab.active{color:var(--accent);border-color:var(--border-bright);background:linear-gradient(180deg,rgba(74,168,255,.12),rgba(74,168,255,.02));box-shadow:0 0 16px rgba(74,168,255,.15) inset}.content{flex:1;padding:6px 16px 40px}.panel{padding:16px;margin-bottom:14px;position:relative}.panel-title{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin:0 0 12px}.panel-title b{color:var(--accent)}
 .levelrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}.levelrow .lvl{font-family:Orbitron,sans-serif;font-size:32px;font-weight:900;color:var(--text);text-shadow:0 0 20px rgba(74,168,255,.35);transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.4s ease, text-shadow 0.4s ease;}.levelrow .lvl.lvl-pop{color:var(--gold);text-shadow:0 0 40px var(--gold), 0 0 15px #fff;transform:scale(1.35);}.levelrow .lvl span:first-child{font-size:13px;color:var(--text-dim);letter-spacing:2px;margin-right:6px;font-family:Rajdhani,sans-serif;font-weight:600}.levelrow .name{font-size:15px;color:var(--text-dim);font-weight:600}.xpbar-wrap{margin-top:6px}.xpbar-label{display:flex;justify-content:space-between;font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text-dim);margin-bottom:5px}.xpbar{height:10px;background:var(--panel-2);border:1px solid var(--border);overflow:hidden}.xpbar-fill{height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));box-shadow:0 0 12px rgba(74,168,255,.6);transition:width .05s linear}
-
 .deadlinerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}.deadline-label{font-size:12px;color:var(--text-dim)}.deadline-label b{color:var(--text);display:block;font-size:13px;margin-top:2px}.deadline-clock{font-family:JetBrains Mono,monospace;font-size:18px;font-weight:600;color:var(--accent);text-shadow:0 0 10px rgba(74,168,255,.4);text-align:right}.deadline-clock.overdue{color:var(--danger)}.progress-count{font-family:JetBrains Mono,monospace;font-size:13px;color:var(--text-dim);margin-bottom:12px}.progress-count b{color:var(--success)}.tinyquest{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.tinyquest:last-child{border-bottom:none}.tinyquest .icon{font-size:16px;width:22px;text-align:center}.tinyquest .info{flex:1;min-width:0}.tinyquest .tn{font-size:13.5px;color:var(--text);font-weight:600}.tinyquest.done .tn{color:var(--text-dim)}.tinyquest .tmeta{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:2px}.tinyquest .tmeta b{color:var(--accent)}.tinyquest .tag-done{font-size:11px;color:var(--success);font-family:JetBrains Mono,monospace;flex-shrink:0}
 .qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.addbtn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1px;color:var(--accent);border:1px solid var(--border-bright);padding:7px 12px;cursor:pointer;background:rgba(74,168,255,.06)}.quest{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:9px;background:var(--panel-2);border:1px solid var(--border);border-left:3px solid var(--accent-dim);position:relative}.quest.done{border-left-color:var(--success);opacity:.7}.quest .icon{font-size:20px;width:26px;text-align:center}.quest .info{flex:1;min-width:0}.quest .qname{font-size:15px;font-weight:600;color:var(--text)}.quest.done .qname{text-decoration:line-through;color:var(--text-dim)}.quest .qmeta,.quest .qdays{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:3px}.quest .qmeta b{color:var(--accent);font-weight:600}.quest .streak{font-size:10.5px;color:var(--gold);margin-left:6px}.check{width:24px;height:24px;border:2px solid var(--border-bright);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:transparent;font-weight:700}.quest.done .check{background:var(--success);border-color:var(--success);color:#05070c}.quest.locked .check{cursor:not-allowed;background:var(--panel);border-color:var(--border);color:var(--text-faint)}.qedit,.qremove{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1px solid var(--border)}.qedit{color:var(--accent);background:rgba(74,168,255,.06)}.qremove{color:var(--danger);background:rgba(255,84,104,.06)}.emptystate{text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13px}
 .logitem{padding:11px 12px;border-left:2px solid var(--border-bright);margin-bottom:8px;background:var(--panel-2)}.logitem .t{font-size:13.5px;color:var(--text)}.logitem .d{font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-faint);margin-top:3px}.logitem.penalty{border-left-color:var(--danger)}.logitem.penalty .t{color:var(--danger)}.logitem.levelup{border-left-color:var(--gold)}.logitem.levelup .t{color:var(--gold)}.logactions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.logbtn{flex:1;min-width:45%;text-align:center;padding:10px 4px;font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:1px;border:1px solid var(--border-bright);cursor:pointer}.logbtn.reset{color:var(--danger);border-color:var(--danger);background:rgba(255,84,104,.06)}.logbtn.switch{color:var(--accent);background:rgba(74,168,255,.06)}.logbtn.backup{color:var(--success);border-color:var(--success);background:rgba(61,220,151,.06)}
 .overlay{position:fixed;inset:0;background:rgba(2,4,10,.75);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}.overlay.show{opacity:1;pointer-events:auto}.syswin{width:100%;max-width:360px;background:linear-gradient(180deg,rgba(12,17,32,.98),rgba(8,12,22,.98));border:1px solid var(--accent);box-shadow:0 0 0 1px rgba(74,168,255,.15),0 0 40px rgba(74,168,255,.25);padding:22px 20px;transform:scale(.9);transition:transform .25s}.overlay.show .syswin{transform:scale(1)}.syswin.gold{border-color:var(--gold)}.syswin.danger{border-color:var(--danger)}.syswin-tag{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:3px;color:var(--text-faint);text-align:center;margin-bottom:10px}.syswin-title{font-family:Orbitron,sans-serif;font-size:22px;font-weight:900;text-align:center;color:var(--accent);margin-bottom:14px;letter-spacing:1px}.syswin.gold .syswin-title{color:var(--gold)}.syswin.danger .syswin-title{color:var(--danger)}.syswin-body{font-size:14.5px;color:var(--text);line-height:1.6;text-align:center;margin-bottom:16px}.syswin-body b{color:var(--accent);font-family:JetBrains Mono,monospace}.syswin-close{display:block;width:100%;text-align:center;padding:11px;margin-top:4px;font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:2px;border:1px solid var(--border-bright);color:var(--accent);background:rgba(74,168,255,.06);cursor:pointer;user-select:none}.syswin-close.danger{color:var(--danger)}.syswin-close.ok{color:var(--success);border-color:var(--success)}.template{display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:7px;background:var(--panel-2);border:1px solid var(--border);cursor:pointer}.template .icon{font-size:18px;width:24px;text-align:center}.template .tn{font-size:14px;color:var(--text);font-weight:600;flex:1}.template .ts{font-size:10px;color:var(--text-faint);font-family:JetBrains Mono,monospace}.modal-scroll{max-height:50vh;overflow-y:auto;margin:4px 0 12px}::-webkit-scrollbar{width:0;height:0}
-
-/* Heatmap Grid */
 .heatmap-grid{display:flex;justify-content:space-between;gap:6px;margin-top:10px;}
 .heatmap-day{flex:1;text-align:center;background:var(--panel-2);border:1px solid var(--border);padding:8px 2px;border-radius:2px;}
 .heatmap-day.active{border-color:var(--success);background:rgba(61,220,151,.12);box-shadow:0 0 10px rgba(61,220,151,.25);}
@@ -59,7 +84,6 @@
 <div class="loginwrap" id="loginScreen">
   <div class="loginbox hud-frame">
     <div class="c3"></div><div class="c4"></div>
-    <!-- LOGIN SCREEN LOGO WITH 'H' -->
     <svg width="48" height="48" viewBox="0 0 100 100" fill="none" style="margin-bottom:10px;filter:drop-shadow(0 0 8px rgba(74,168,255,0.6));">
       <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" stroke="#4aa8ff" stroke-width="6" fill="#0f1526"/>
       <path d="M32 28 V72 M68 28 V72 M32 50 H68" stroke="#4aa8ff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -78,7 +102,6 @@
 <div class="app" id="app" style="display:none">
 <div class="topbar">
   <div class="brand">
-    <!-- TOPBAR BRAND LOGO WITH 'H' -->
     <svg width="26" height="26" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 0 5px rgba(74,168,255,0.8));flex-shrink:0;">
       <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" stroke="#4aa8ff" stroke-width="7" fill="#0f1526"/>
       <path d="M32 28 V72 M68 28 V72 M32 50 H68" stroke="#4aa8ff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
@@ -100,16 +123,12 @@
 <div class="content">
 <div class="tabpanel" id="tab-status">
 <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><div class="levelrow"><div class="lvl" id="lvlWrap"><span>LV</span><span id="lvlNum">1</span></div><div class="name" id="playerName">Hunter</div></div><div class="xpbar-wrap"><div class="xpbar-label"><span>XP</span><span id="xpLabel">0 / 100</span></div><div class="xpbar"><div class="xpbar-fill" id="xpFill" style="width:0%"></div></div></div></div>
-
-<!-- ALL USERS RANK & LEVEL LEADERBOARD PANEL -->
 <div class="panel hud-frame">
   <div class="c3"></div><div class="c4"></div>
   <p class="panel-title">ALL HUNTERS <b>LEADERBOARD</b></p>
   <div class="leaderboard-list" id="leaderboardList"></div>
 </div>
-
 <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">WEEKLY <b>STREAK HEATMAP</b></p><div class="heatmap-grid" id="heatmapGrid"></div></div>
-
 <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">QUEST <b>PROGRESS</b></p><div class="deadlinerow"><div class="deadline-label">Deadline<b>10:00 PM IST Tonight</b></div><div class="deadline-clock" id="deadlineClock">--:--:--</div></div><div class="progress-count" id="progressCount">0 / 0 quests cleared today</div><div id="statusQuestList"></div></div>
 </div>
 <div class="tabpanel" id="tab-quests" style="display:none"><div class="qhead"><p class="panel-title" style="margin:0">DAILY <b>QUESTS</b></p><div class="addbtn" id="openAdd">+ ADD</div></div><div id="questList"></div></div>
@@ -117,23 +136,12 @@
 <div class="tabpanel" id="tab-daily" style="display:none">
   <div class="panel hud-frame">
     <div class="c3"></div><div class="c4"></div>
-    <div class="qhead">
-      <p class="panel-title" style="margin:0">DAILY <b>JOURNAL</b></p>
-      <div id="dailyDateLabel" style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-faint)"></div>
-    </div>
-    <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:12px">
-      Write about your day. Your journal is saved separately for each date.
-    </div>
+    <div class="qhead"><p class="panel-title" style="margin:0">DAILY <b>JOURNAL</b></p><div id="dailyDateLabel" style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-faint)"></div></div>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:12px">Write about your day. Your journal is saved separately for each date.</div>
     <textarea id="dailyJournalInput" style="width:100%;min-height:260px;resize:vertical;padding:14px;background:var(--panel-2);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:15px;line-height:1.6;outline:none" placeholder="How was your day? What did you learn? What went well? What can you improve tomorrow?"></textarea>
-    <div style="display:flex;gap:10px;margin-top:12px">
-      <div class="syswin-close ok" id="saveDailyJournal" style="flex:1">SAVE TODAY</div>
-      <div class="syswin-close" id="clearDailyJournal" style="flex:1">CLEAR</div>
-    </div>
+    <div style="display:flex;gap:10px;margin-top:12px"><div class="syswin-close ok" id="saveDailyJournal" style="flex:1">SAVE TODAY</div><div class="syswin-close" id="clearDailyJournal" style="flex:1">CLEAR</div></div>
   </div>
-  <div class="panel hud-frame">
-    <div class="c3"></div><div class="c4"></div>
-    <p class="panel-title">JOURNAL <b>HISTORY</b></p><div id="dailyJournalHistory"></div>
-  </div>
+  <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">JOURNAL <b>HISTORY</b></p><div id="dailyJournalHistory"></div></div>
 </div>
 </div></div>
 <div class="overlay" id="sysOverlay"><div class="syswin hud-frame" id="sysWin"><div class="c3"></div><div class="c4"></div><div class="syswin-tag" id="sysTag">[ SYSTEM ]</div><div class="syswin-title" id="sysTitle">QUEST COMPLETE</div><div class="syswin-body" id="sysBody"></div><div id="sysActions"><div class="syswin-close" id="sysClose">CONFIRM</div></div></div></div>
@@ -141,9 +149,7 @@
 <div class="overlay" id="renameOverlay"><div class="syswin hud-frame" style="max-width:360px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">RENAME QUEST</div><input type="text" class="login-input" id="renameInput" maxlength="30"><div style="display:flex;gap:10px"><div class="syswin-close" id="renameCancel" style="flex:1">CANCEL</div><div class="syswin-close ok" id="renameSave" style="flex:1">SAVE</div></div></div></div>
 
 <script>
-// -------------------------------------------------------------
 // FIREBASE CONFIGURATION
-// -------------------------------------------------------------
 const firebaseConfig = {
   apiKey: "AIzaSyCZLtBGgIWrPUr_BIz3MZVAmXhJeqsP7sI",
   authDomain: "the-system-16b01.firebaseapp.com",
@@ -159,9 +165,7 @@ try {
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore();
   }
-} catch(e) {
-  console.log("Firebase initialized or offline.");
-}
+} catch(e) { console.log("Firebase offline."); }
 
 const CURRENT_USER_KEY='system-current-user';
 const REGISTRY_KEY='system-hunter-registry';
@@ -172,23 +176,29 @@ const TEMPLATES=[
 {name:'Stretch / Mobility',icon:'🤸'},{name:'Cold Discipline',icon:'❄️'},{name:'Clean Eating',icon:'🥗'},{name:'Social / Outreach',icon:'🗣️'}];
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
-let isAdminMode=false;
-let unsubHunter = null;
+let isAdminMode=false, unsubHunter = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false;
 
-let uiXP = 0;
-let uiLevel = 1;
-let uiMaxXP = 100;
-let isAnimatingXP = false;
+/* SPARK PARTICLES EFFECT */
+function spawnParticles(x, y) {
+  for (let i = 0; i < 15; i++) {
+    let p = document.createElement('div');
+    p.className = 'spark';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    let angle = Math.random() * Math.PI * 2;
+    let dist = Math.random() * 80 + 30;
+    p.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 500);
+  }
+}
 
-/* WEB AUDIO SFX SYNTHESIZER */
+/* ADVANCED WEB AUDIO SYNTHESIZER */
 let audioCtx = null;
 function initAudio(){
-  if(!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if(audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if(audioCtx.state === 'suspended') audioCtx.resume();
 }
 document.addEventListener('touchstart', initAudio, {once:true});
 document.addEventListener('click', initAudio, {once:true});
@@ -201,15 +211,19 @@ function playSound(type){
 
     if (type === 'quest') {
       const osc = audioCtx.createOscillator();
+      const osc2 = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      osc.connect(gain); gain.connect(audioCtx.destination);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+      osc.connect(gain); osc2.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'square'; osc2.type = 'sawtooth';
+      osc.frequency.setValueAtTime(300, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.15);
+      osc2.frequency.setValueAtTime(400, now);
+      osc2.frequency.exponentialRampToValueAtTime(1800, now + 0.15);
       gain.gain.setValueAtTime(0.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-      osc.start(now); osc.stop(now + 0.1);
-    }
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+      osc.start(now); osc.stop(now + 0.15);
+      osc2.start(now); osc2.stop(now + 0.15);
+    } 
     else if (type === 'xpcharge') {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -220,7 +234,7 @@ function playSound(type){
       gain.gain.setValueAtTime(0.12, now);
       gain.gain.linearRampToValueAtTime(0.01, now + 0.45);
       osc.start(now); osc.stop(now + 0.45);
-    }
+    } 
     else if (type === 'levelup') {
       const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
       notes.forEach((freq, idx) => {
@@ -243,7 +257,7 @@ function playSound(type){
       subGain.gain.setValueAtTime(0.35, now);
       subGain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
       sub.start(now); sub.stop(now + 0.6);
-    }
+    } 
     else if (type === 'alert') {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -258,12 +272,7 @@ function playSound(type){
   } catch(e){}
 }
 
-function requestNotificationPermission(){
-  if ("Notification" in window && Notification.permission === "default") {
-    Notification.requestPermission();
-  }
-}
-
+function requestNotificationPermission(){ if ("Notification" in window && Notification.permission === "default") Notification.requestPermission(); }
 function istNow(){return new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}))}
 function todayStr(){const d=istNow();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function istDateAt(hour){const d=istNow();d.setHours(hour,0,0,0);return d}
@@ -271,7 +280,6 @@ function cid(){return 'q'+Math.random().toString(36).slice(2,10)}
 function keyName(n){return n.trim().toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-_]/g,'').slice(0,60)||'hunter'}
 function profileKey(n){return 'system-profile:'+keyName(n)}
 function fmtHMS(ms){ms=Math.max(0,ms);let h=Math.floor(ms/36e5),m=Math.floor(ms%36e5/6e4),s=Math.floor(ms%6e4/1e3);return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')}
-function fmtTime(d){return d.toLocaleTimeString('en-IN',{timeZone:'Asia/Kolkata',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:true})+' IST'}
 function formatDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-IN',{month:'short',day:'numeric',year:'numeric'})}
 function daysSince(s){if(!s)return 0;const a=new Date(s+'T00:00:00'),b=new Date(todayStr()+'T00:00:00');return Math.max(1,Math.floor((b-a)/86400000)+1)}
 function redistributeXP(){const n=data.quests.length;if(!n)return;const base=Math.floor(100/n),rem=100-base*n;data.quests.forEach((q,i)=>q.xp=base+(i<rem?1:0))}
@@ -303,163 +311,54 @@ function loadRegistry(){
     }, e => console.log(e));
   }
 }
-
-function saveRegistry(){
-  localStorage.setItem(REGISTRY_KEY,JSON.stringify(registryCache));
-  if(db){
-    db.collection("hunters_registry").doc("registry").set({list: registryCache}).catch(e=>console.log(e));
-  }
-}
-
-function updateRegistry(){
-  if(!data||!currentUser)return;
-  const k=keyName(currentUser),i=registryCache.findIndex(h=>h.key===k),entry={key:k,name:data.playerName,level:data.level,xp:data.xp||0,password:data.password||""};
-  if(i>=0)registryCache[i]=entry;else registryCache.push(entry);
-  saveRegistry();
-  renderLeaderboard();
-}
+function saveRegistry(){localStorage.setItem(REGISTRY_KEY,JSON.stringify(registryCache));if(db)db.collection("hunters_registry").doc("registry").set({list: registryCache}).catch(e=>console.log(e));}
+function updateRegistry(){if(!data||!currentUser)return;const k=keyName(currentUser),i=registryCache.findIndex(h=>h.key===k),entry={key:k,name:data.playerName,level:data.level,xp:data.xp||0,password:data.password||""};if(i>=0)registryCache[i]=entry;else registryCache.push(entry);saveRegistry();renderLeaderboard();}
 
 function renderHunterList(){
   const w=document.getElementById('hunterListWrap');
   if(!registryCache.length){w.innerHTML='';return}
-
   let html = `<div class="hunter-list-title">[ EXISTING HUNTERS ] <span class="admin-toggle" id="adminToggleBtn">${isAdminMode?'[EXIT ADMIN]':'[ADMIN]'}</span></div>`;
-
   html += registryCache.map(h => {
     let rObj = rankFor(h.level || 1);
-    return `<div class="hunter-row">
-      <div class="hr-name">${escapeHtml(h.name)}</div>
-      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:${rObj.color}; padding:2px 6px; border:1px solid ${rObj.color}; background:rgba(74,168,255,.05)">${rObj.r}</div>
-      <div class="hr-level">LV ${h.level || 1}</div>
-      <div class="hr-enter" data-enter="${h.key}">ENTER</div>
-      ${isAdminMode ? `<div class="hr-del" data-del="${h.key}">✕</div>` : ''}
-    </div>`;
+    return `<div class="hunter-row"><div class="hr-name">${escapeHtml(h.name)}</div><div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:${rObj.color}; padding:2px 6px; border:1px solid ${rObj.color}; background:rgba(74,168,255,.05)">${rObj.r}</div><div class="hr-level">LV ${h.level || 1}</div><div class="hr-enter" data-enter="${h.key}">ENTER</div>${isAdminMode ? `<div class="hr-del" data-del="${h.key}">✕</div>` : ''}</div>`;
   }).join('');
-
   w.innerHTML = html;
-
-  document.getElementById('adminToggleBtn').onclick = () => {
-    if(!isAdminMode){
-      let pin = prompt("Enter Admin Password:");
-      if(pin === "admin123"){
-        isAdminMode = true;
-        renderHunterList();
-      } else if(pin !== null){
-        alert("Incorrect Admin Password!");
-      }
-    } else {
-      isAdminMode = false;
-      renderHunterList();
-    }
-  };
-
-  w.querySelectorAll('[data-enter]').forEach(e=>e.onclick=()=>{
-    const h=registryCache.find(x=>x.key===e.dataset.enter);
-    if(h){
-      document.getElementById('loginInput').value=h.name;
-      document.getElementById('passwordInput').focus();
-    }
-  });
-
-  w.querySelectorAll('[data-del]').forEach(e=>e.onclick=()=>{
-    const h=registryCache.find(x=>x.key===e.dataset.del);
-    if(!h)return;
-    if(confirm('Admin Action: Delete '+h.name+' and all progress?')){
-      localStorage.removeItem(profileKey(h.name));
-      if(db){db.collection("hunters").doc(h.key).delete();}
-      registryCache=registryCache.filter(x=>x.key!==e.dataset.del);
-      saveRegistry();
-      renderHunterList();
-      renderLeaderboard();
-    }
-  });
+  document.getElementById('adminToggleBtn').onclick = () => { let pin = prompt("Enter Admin Password:"); if(pin === "admin123") { isAdminMode = !isAdminMode; renderHunterList(); } else if(pin !== null) alert("Incorrect Password!"); };
+  w.querySelectorAll('[data-enter]').forEach(e=>e.onclick=()=>{ const h=registryCache.find(x=>x.key===e.dataset.enter); if(h){ document.getElementById('loginInput').value=h.name; document.getElementById('passwordInput').focus(); } });
+  w.querySelectorAll('[data-del]').forEach(e=>e.onclick=()=>{ const h=registryCache.find(x=>x.key===e.dataset.del); if(!h)return; if(confirm('Admin Action: Delete '+h.name+'?')){ localStorage.removeItem(profileKey(h.name)); if(db)db.collection("hunters").doc(h.key).delete(); registryCache=registryCache.filter(x=>x.key!==e.dataset.del); saveRegistry(); renderHunterList(); renderLeaderboard(); } });
 }
 
 function renderLeaderboard(){
-  const lb = document.getElementById('leaderboardList');
-  if(!lb) return;
-  if(!registryCache.length){
-    lb.innerHTML = '<div class="emptystate">No hunters registered yet.</div>';
-    return;
-  }
-
-  let sorted = [...registryCache].sort((a, b) => {
-    if((b.level || 1) !== (a.level || 1)) return (b.level || 1) - (a.level || 1);
-    return (b.xp || 0) - (a.xp || 0);
-  });
-
-  lb.innerHTML = sorted.map((h, idx) => {
-    let rObj = rankFor(h.level || 1);
-    return `
-      <div class="lb-row">
-        <div style="font-family:'Orbitron',sans-serif; font-size:11px; color:var(--text-faint); width:18px; text-align:center;">#${idx+1}</div>
-        <div class="lb-info">
-          <div class="lb-name">${escapeHtml(h.name)}</div>
-          <div class="lb-meta">XP: ${h.xp || 0} / 100</div>
-        </div>
-        <div class="lb-rank" style="color:${rObj.color}; border-color:${rObj.color}">${rObj.r}</div>
-        <div class="lb-lvl">LV ${h.level || 1}</div>
-      </div>
-    `;
-  }).join('');
+  const lb = document.getElementById('leaderboardList'); if(!lb) return;
+  if(!registryCache.length){ lb.innerHTML = '<div class="emptystate">No hunters registered yet.</div>'; return; }
+  let sorted = [...registryCache].sort((a, b) => { if((b.level || 1) !== (a.level || 1)) return (b.level || 1) - (a.level || 1); return (b.xp || 0) - (a.xp || 0); });
+  lb.innerHTML = sorted.map((h, idx) => { let rObj = rankFor(h.level || 1); return `<div class="lb-row"><div style="font-family:'Orbitron',sans-serif; font-size:11px; color:var(--text-faint); width:18px; text-align:center;">#${idx+1}</div><div class="lb-info"><div class="lb-name">${escapeHtml(h.name)}</div><div class="lb-meta">XP: ${h.xp || 0} / 100</div></div><div class="lb-rank" style="color:${rObj.color}; border-color:${rObj.color}">${rObj.r}</div><div class="lb-lvl">LV ${h.level || 1}</div></div>`; }).join('');
 }
 
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-
-function saveData(){
-  if(!currentUser||!data)return false;
-  try{
-    localStorage.setItem(profileKey(currentUser),JSON.stringify(data));
-    updateRegistry();
-    if(db){
-      db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e));
-    }
-    return true;
-  }catch(e){
-    showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Browser storage is unavailable or full.<br>Please allow site storage in Chrome and try again.'});
-    return false;
-  }
-}
+function saveData(){ if(!currentUser||!data)return false; try{ localStorage.setItem(profileKey(currentUser),JSON.stringify(data)); updateRegistry(); if(db)db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e)); return true; }catch(e){ showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Storage full or unavailable.'}); return false; } }
 
 function loadProfile(name, password=""){
-  let raw=localStorage.getItem(profileKey(name));
-  if(raw){data=safeParse(raw,null)}
-  if(!data){data=defaultData(name, password)}
+  let raw=localStorage.getItem(profileKey(name)); if(raw)data=safeParse(raw,null);
+  if(!data)data=defaultData(name, password);
   if(!data.password && password) data.password = password;
-
-  data.playerName=name;
-  data.xpToNext=100;
-  data.lastLeveledDate=data.lastLeveledDate||null;
+  data.playerName=name; data.xpToNext=100; data.lastLeveledDate=data.lastLeveledDate||null;
   data.quests=(data.quests||[]).map(q=>({...q,id:q.id||cid(),xp:q.xp||0,icon:q.icon||'🎯',streak:q.streak||0,totalDays:q.totalDays||0,completedToday:!!q.completedToday,startDate:q.startDate||todayStr()}));
-  data.lastActiveDate=data.lastActiveDate||todayStr();
-  data.log=data.log||[];
-  data.history=data.history||{};
-  ensureJournal();
-  data.warningShownDate=data.warningShownDate||null;
-  data.deadlineAlertShownDate=data.deadlineAlertShownDate||null;
-
-  uiXP = data.xp;
-  uiLevel = data.level;
-  uiMaxXP = 100;
-
-  redistributeXP();
-  applyDailyReset();
-  saveData();
-
+  data.lastActiveDate=data.lastActiveDate||todayStr(); data.log=data.log||[]; data.history=data.history||{}; ensureJournal();
+  data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null;
+  uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100;
+  redistributeXP(); applyDailyReset(); saveData();
   if(db){
     if(unsubHunter) unsubHunter();
     unsubHunter = db.collection("hunters").doc(keyName(name)).onSnapshot(doc => {
       if(doc.exists){
         let cloudData = doc.data();
         if(cloudData && JSON.stringify(cloudData) !== JSON.stringify(data)){
-          data = cloudData;
-          uiXP = data.xp;
-          uiLevel = data.level;
-          localStorage.setItem(profileKey(name), JSON.stringify(data));
-          render();
+          data = cloudData; uiXP = data.xp; uiLevel = data.level;
+          localStorage.setItem(profileKey(name), JSON.stringify(data)); render();
         }
       }
-    }, e => console.log(e));
+    });
   }
 }
 
@@ -467,205 +366,78 @@ function boot(){loadRegistry();const u=localStorage.getItem(CURRENT_USER_KEY);if
 function showLogin(h=''){if(tickHandle){clearInterval(tickHandle);tickHandle=null}document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('loginHint').textContent=h;document.getElementById('loginInput').value='';document.getElementById('passwordInput').value='';renderHunterList()}
 function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';requestNotificationPermission();render();if(tickHandle)clearInterval(tickHandle);tickHandle=setInterval(tick,1000)}
 
-/* LOGIN WITH PASSWORD AUTHENTICATION */
 function loginWithName(n, pass){
   n=n.trim(); pass=pass.trim();
   if(!n){document.getElementById('loginHint').textContent='Enter a name to continue.';return;}
   if(!pass){document.getElementById('loginHint').textContent='Enter password to awaken.';return;}
-
-  const k = keyName(n);
-  const existingHunter = registryCache.find(x => x.key === k);
-
-  if(existingHunter && existingHunter.password){
-    if(existingHunter.password !== pass){
-      playSound('alert');
-      document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n;
-      return;
-    }
-  }
-
+  const k = keyName(n); const existingHunter = registryCache.find(x => x.key === k);
+  if(existingHunter && existingHunter.password && existingHunter.password !== pass){ playSound('alert'); document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n; return; }
   let raw = localStorage.getItem(profileKey(n));
-  if(raw){
-    let localD = safeParse(raw, null);
-    if(localD && localD.password && localD.password !== pass){
-      playSound('alert');
-      document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n;
-      return;
-    }
-  }
-
-  currentUser=n;
-  localStorage.setItem(CURRENT_USER_KEY,n);
-  loadProfile(n, pass);
-  showApp();
+  if(raw){ let localD = safeParse(raw, null); if(localD && localD.password && localD.password !== pass){ playSound('alert'); document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n; return; } }
+  currentUser=n; localStorage.setItem(CURRENT_USER_KEY,n); loadProfile(n, pass); showApp();
 }
 
-function logoutUser(){
-  if(unsubHunter) { unsubHunter(); unsubHunter = null; }
-  localStorage.removeItem(CURRENT_USER_KEY);
-  currentUser=null;
-  data=null;
-  showLogin('Switched hunter. Enter name and password.');
-}
+function logoutUser(){ if(unsubHunter) { unsubHunter(); unsubHunter = null; } localStorage.removeItem(CURRENT_USER_KEY); currentUser=null; data=null; showLogin('Switched hunter. Enter name and password.'); }
 
-/* RESET TODAY ONLY */
 function resetTodayData(){
-  if(!data) return;
-  const t = todayStr();
-
-  let todayXPGained = 0;
-  data.quests.forEach(q => {
-    if(q.completedToday){
-      todayXPGained += q.xp;
-      q.completedToday = false;
-      q.streak = Math.max(0, q.streak - 1);
-      q.totalDays = Math.max(0, q.totalDays - 1);
-    }
-  });
-
-  if(data.lastLeveledDate === t){
-    data.level = Math.max(1, data.level - 1);
-    data.xp = Math.max(0, 100 - todayXPGained);
-    data.lastLeveledDate = null;
-  } else {
-    data.xp = Math.max(0, data.xp - todayXPGained);
-  }
-
-  if(data.history) delete data.history[t];
-  if(data.journal) delete data.journal[t];
-
-  data.warningShownDate = null;
-  data.deadlineAlertShownDate = null;
-
-  if(data.log) {
-    data.log = data.log.filter(l => l.date !== t);
-  } else {
-    data.log = [];
-  }
-  data.log.unshift({date: t, text: "Reset today's progress & logs.", type: 'penalty'});
-  data.log = data.log.slice(0, 40);
-
-  uiXP = data.xp;
-  uiLevel = data.level;
-  uiMaxXP = 100;
-
-  saveData();
-  render();
-  playSound('alert');
-  showSysWindow({
-    tag:'[ SYSTEM ]',
-    title:'TODAY RESET',
-    tone:'danger',
-    body:"Today's progress, Level & Logs have been reset!"
-  });
+  if(!data) return; const t = todayStr(); let todayXPGained = 0;
+  data.quests.forEach(q => { if(q.completedToday){ todayXPGained += q.xp; q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); } });
+  if(data.lastLeveledDate === t){ data.level = Math.max(1, data.level - 1); data.xp = Math.max(0, 100 - todayXPGained); data.lastLeveledDate = null; } else { data.xp = Math.max(0, data.xp - todayXPGained); }
+  if(data.history) delete data.history[t]; if(data.journal) delete data.journal[t];
+  data.warningShownDate = null; data.deadlineAlertShownDate = null;
+  if(data.log) data.log = data.log.filter(l => l.date !== t); else data.log = [];
+  data.log.unshift({date: t, text: "Reset today's progress & logs.", type: 'penalty'}); data.log = data.log.slice(0, 40);
+  uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100; saveData(); render(); playSound('alert');
+  showSysWindow({ tag:'[ SYSTEM ]', title:'TODAY RESET', tone:'danger', body:"Today's progress, Level & Logs have been reset!" });
 }
 
 function applyDailyReset(){
-  const t=todayStr();
-  if(data.lastActiveDate===t)return;
+  const t=todayStr(); if(data.lastActiveDate===t)return;
   const incomplete=data.quests.filter(q=>!q.completedToday);
-  if(incomplete.length){
-    incomplete.forEach(q=>q.streak=0);
-    data.history[data.lastActiveDate] = 'missed';
-    data.log.unshift({date:t,text:`Missed ${incomplete.length} quest(s). Previous day was not counted.`,type:'penalty'});
-  } else if(data.quests.length > 0) {
-    data.history[data.lastActiveDate] = 'completed';
-  }
-  data.quests.forEach(q=>q.completedToday=false);
-  data.lastActiveDate=t;
-  data.warningShownDate=null;
-  data.deadlineAlertShownDate=null;
-  data.log=data.log.slice(0,40);
+  if(incomplete.length){ incomplete.forEach(q=>q.streak=0); data.history[data.lastActiveDate] = 'missed'; data.log.unshift({date:t,text:`Missed ${incomplete.length} quest(s). Previous day was not counted.`,type:'penalty'}); }
+  else if(data.quests.length > 0) data.history[data.lastActiveDate] = 'completed';
+  data.quests.forEach(q=>q.completedToday=false); data.lastActiveDate=t; data.warningShownDate=null; data.deadlineAlertShownDate=null; data.log=data.log.slice(0,40);
 }
 
 function gainXP(a){
-  if(data.lastLeveledDate === todayStr()){
-    return {leveledUp: false, newRank: null, locked: true};
-  }
-
-  data.xp += a;
-  let up = false, oldRank = rankFor(data.level).r;
-
-  if(data.xp >= 100){
-    data.xp = 0;
-    data.level++;
-    data.lastLeveledDate = todayStr();
-    up = true;
-  }
-  return {leveledUp: up, newRank: rankFor(data.level).r !== oldRank ? rankFor(data.level).r : null, locked: false};
+  data.xp += a; let up = false, oldRank = rankFor(data.level).r;
+  if(data.xp >= 100){ data.xp = 0; data.level++; data.lastLeveledDate = todayStr(); up = true; }
+  return {leveledUp: up, newRank: rankFor(data.level).r !== oldRank ? rankFor(data.level).r : null};
 }
 
-function completeQuest(id){
-  const q=data.quests.find(x=>x.id===id);
-  if(!q)return;
-  const now=istNow();
-
+function completeQuest(id, evt){
+  const q=data.quests.find(x=>x.id===id); if(!q)return; const now=istNow();
   const isAllCurrentlyCompleted = data.quests.length > 0 && data.quests.every(quest => quest.completedToday);
 
-  if(q.completedToday && isAllCurrentlyCompleted){
-    playSound('alert');
-    showSysWindow({
-      tag:'[ SYSTEM LOCKED ]',
-      title:'QUESTS LOCKED',
-      tone:'danger',
-      body:'<b>ALL QUESTS CLEARED TODAY!</b><br>Unchecking is locked. Resets tomorrow.'
-    });
-    return;
-  }
+  if(q.completedToday && isAllCurrentlyCompleted){ playSound('alert'); showSysWindow({ tag:'[ SYSTEM LOCKED ]', title:'QUESTS LOCKED', tone:'danger', body:'<b>ALL QUESTS CLEARED TODAY!</b><br>Unchecking is locked. Resets tomorrow.' }); return; }
 
   if(q.completedToday){
-    q.completedToday = false;
-    q.streak = Math.max(0, q.streak - 1);
-    q.totalDays = Math.max(0, q.totalDays - 1);
-    data.xp = Math.max(0, data.xp - q.xp);
-    delete data.history[todayStr()];
-
-    data.log.unshift({date:todayStr(),text:`Unchecked "${q.name}" — -${q.xp} XP`,type:'penalty'});
-    data.log=data.log.slice(0,40);
-    saveData();
-    renderQuests();
-    renderStatus();
-    renderHeatmap();
-    playSound('alert');
-    return;
+    q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); data.xp = Math.max(0, data.xp - q.xp); delete data.history[todayStr()];
+    data.log.unshift({date:todayStr(),text:`Unchecked "${q.name}" — -${q.xp} XP`,type:'penalty'}); data.log=data.log.slice(0,40);
+    saveData(); renderQuests(); renderStatus(); renderHeatmap(); playSound('alert'); return;
   }
 
-  if(now.getHours()>=DEADLINE_HOUR){
-    playSound('alert');
-    showSysWindow({tag:'[ SYSTEM ]',title:'TOO LATE',tone:'danger',body:'The 10:00 PM IST deadline has passed.<br>This quest cannot be counted for today.'});
-    return;
-  }
+  if(now.getHours()>=DEADLINE_HOUR){ playSound('alert'); showSysWindow({tag:'[ SYSTEM ]',title:'TOO LATE',tone:'danger',body:'The 10:00 PM IST deadline has passed.<br>This quest cannot be counted for today.'}); return; }
 
-  q.completedToday=true;
-  q.streak++;
-  q.totalDays++;
-
+  q.completedToday=true; q.streak++; q.totalDays++;
   const allDone = data.quests.length > 0 && data.quests.every(quest => quest.completedToday);
-  if(allDone) {
-    data.history[todayStr()] = 'completed';
-  }
+  if(allDone) data.history[todayStr()] = 'completed';
 
   playSound('quest');
+  if (evt) spawnParticles(evt.clientX, evt.clientY);
+  document.body.classList.add('shake-active');
+  setTimeout(() => document.body.classList.remove('shake-active'), 400);
+
   const r = gainXP(q.xp);
-  data.log.unshift({date:todayStr(),text:`Completed "${q.name}" — +${q.xp} XP`,type:'normal'});
-  data.log=data.log.slice(0,40);
+  data.log.unshift({date:todayStr(),text:`Completed "${q.name}" — +${q.xp} XP`,type:'normal'}); data.log=data.log.slice(0,40);
+  saveData(); renderQuests(); renderStatus(); renderHeatmap();
 
-  saveData();
-  renderQuests();
-  renderStatus();
-  renderHeatmap();
-
-  if(r.leveledUp) {
-    data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'});
-    saveData();
+  if(r.leveledUp) { 
+    data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
+    saveData(); 
   }
 
-  showSysWindow({
-    tag:'[ QUEST CLEARED ]',
-    title:'QUEST COMPLETE',
-    tone:'normal',
-    body: r.locked ? `<b>QUEST CLEARED!</b><br>Level 100% reached today. Next XP gains unlock tomorrow!` : (allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.`)
-  });
+  showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
 }
 
 function removeQuest(id){if(!confirm('Remove this quest?'))return;data.quests=data.quests.filter(q=>q.id!==id);redistributeXP();saveData();render()}
@@ -675,325 +447,103 @@ function saveRename(){const v=document.getElementById('renameInput').value.trim(
 function closeRename(){document.getElementById('renameOverlay').classList.remove('show');renamingId=null}
 
 function tick(){
-  if(!data)return;
-  applyDailyReset();
+  if(!data)return; applyDailyReset();
   const now=istNow(),dl=istDateAt(DEADLINE_HOUR),ms=dl-now;
   const c=document.getElementById('deadlineClock');
-  if(c){
-    c.textContent=fmtHMS(ms);
-    c.classList.toggle('overdue',ms<=0);
-  }
+  if(c){ c.textContent=fmtHMS(ms); c.classList.toggle('overdue',ms<=0); }
+
+  const isLate = now.getHours() >= ALERT_HOUR;
+  const hasIncomplete = data.quests.length > 0 && data.quests.some(q => !q.completedToday);
+  if (isLate && hasIncomplete) document.body.classList.add('penalty-mode');
+  else document.body.classList.remove('penalty-mode');
 
   if(now.getHours()>=ALERT_HOUR && now.getHours()<DEADLINE_HOUR && data.warningShownDate!==todayStr()){
     const inc=data.quests.filter(q=>!q.completedToday);
     if(inc.length){
-      data.warningShownDate=todayStr();
-      saveData();
-      playSound('alert');
-      showSysWindow({
-        tag:'[ ALERT ]',
-        title:'9 PM WARNING',
-        tone:'danger',
-        body:`You have <b>${inc.length}</b> quest(s) incomplete.<br>Please complete them before the 10:00 PM IST deadline.`
-      });
-
-      if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("[ SYSTEM ALERT: 9 PM ]", {
-          body: `You have ${inc.length} incomplete quest(s). Complete them before 10:00 PM IST!`,
-          icon: "https://cdn-icons-png.flaticon.com/512/1827/1827504.png"
-        });
-      }
+      data.warningShownDate=todayStr(); saveData(); playSound('alert');
+      showSysWindow({ tag:'[ ALERT ]', title:'9 PM WARNING', tone:'danger', body:`You have <b>${inc.length}</b> quest(s) incomplete.<br>Please complete them before the 10:00 PM IST deadline.` });
+      if ("Notification" in window && Notification.permission === "granted") new Notification("[ SYSTEM ALERT: 9 PM ]", { body: `You have ${inc.length} incomplete quest(s). Complete them before 10:00 PM IST!`, icon: "https://cdn-icons-png.flaticon.com/512/1827/1827504.png" });
     }
   }
 
   if(now.getHours()>=DEADLINE_HOUR && data.deadlineAlertShownDate!==todayStr()){
     const inc=data.quests.filter(q=>!q.completedToday);
-    if(inc.length){
-      data.deadlineAlertShownDate=todayStr();
-      saveData();
-      playSound('alert');
-      showSysWindow({
-        tag:'[ ALERT ]',
-        title:'DEADLINE MISSED',
-        tone:'danger',
-        body:`10:00 PM IST passed with <b>${inc.length}</b> quest(s) incomplete.<br>This day will not be counted as completed.`
-      });
-    }
+    if(inc.length){ data.deadlineAlertShownDate=todayStr(); saveData(); playSound('alert'); showSysWindow({ tag:'[ ALERT ]', title:'DEADLINE MISSED', tone:'danger', body:`10:00 PM IST passed with <b>${inc.length}</b> quest(s) incomplete.<br>This day will not be counted as completed.` }); }
   }
 }
 
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
-
-  if(uiLevel === data.level && uiXP === data.xp) {
-    updateXPBarUI(uiLevel, uiXP, 100);
-    return;
-  }
-
-  isAnimatingXP = true;
-  playSound('xpcharge');
+  if(uiLevel === data.level && uiXP === data.xp) { updateXPBarUI(uiLevel, uiXP, 100); return; }
+  isAnimatingXP = true; playSound('xpcharge');
 
   const timer = setInterval(() => {
     let targetXP = (uiLevel < data.level) ? 100 : data.xp;
-
-    if(uiXP < targetXP) {
-      uiXP = Math.min(targetXP, uiXP + Math.max(1, Math.ceil((targetXP - uiXP) / 6)));
-      updateXPBarUI(uiLevel, uiXP, 100);
-    }
-    else if(uiXP > targetXP && uiLevel === data.level) {
-      uiXP = Math.max(targetXP, uiXP - Math.max(1, Math.ceil((uiXP - targetXP) / 6)));
-      updateXPBarUI(uiLevel, uiXP, 100);
-    }
+    if(uiXP < targetXP) { uiXP = Math.min(targetXP, uiXP + Math.max(1, Math.ceil((targetXP - uiXP) / 6))); updateXPBarUI(uiLevel, uiXP, 100); }
+    else if(uiXP > targetXP && uiLevel === data.level) { uiXP = Math.max(targetXP, uiXP - Math.max(1, Math.ceil((uiXP - targetXP) / 6))); updateXPBarUI(uiLevel, uiXP, 100); }
 
     if(uiXP >= 100 && uiLevel < data.level) {
-      clearInterval(timer);
-      isAnimatingXP = false;
-
-      const lvlWrap = document.getElementById('lvlWrap');
-      if(lvlWrap) lvlWrap.classList.add('lvl-pop');
+      clearInterval(timer); isAnimatingXP = false;
+      const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
       playSound('levelup');
+      
+      document.body.classList.add('shake-active');
+      setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-      uiLevel++;
-      const newRankObj = rankFor(uiLevel);
-
-      showSysWindow({
-        tag:'[ LEVEL UP ]',
-        title:`LEVEL ${uiLevel}`,
-        tone:'gold',
-        body:`Rank: <b>${newRankObj.r}</b><br>Level 100% reached today! Next level progress unlocks tomorrow.`
-      });
-
-      setTimeout(() => {
-        if(lvlWrap) lvlWrap.classList.remove('lvl-pop');
-        uiXP = 0;
-        updateXPBarUI(uiLevel, uiXP, 100);
-
-        setTimeout(() => {
-          animateXPOnStatusTab();
-        }, 300);
-
-      }, 1300);
-
+      uiLevel++; const newRankObj = rankFor(uiLevel);
+      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
+      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); uiXP = 0; updateXPBarUI(uiLevel, uiXP, 100); setTimeout(() => { animateXPOnStatusTab(); }, 300); }, 1300);
       return;
     }
-
-    if(uiXP === targetXP && uiLevel === data.level) {
-      clearInterval(timer);
-      isAnimatingXP = false;
-    }
+    if(uiXP === targetXP && uiLevel === data.level) { clearInterval(timer); isAnimatingXP = false; }
   }, 40);
 }
 
 function updateXPBarUI(level, xpVal, maxXP){
   const r = rankFor(level);
-  document.getElementById('lvlNum').textContent = level;
-  document.getElementById('rankChip').textContent = r.r;
+  document.getElementById('lvlNum').textContent = level; document.getElementById('rankChip').textContent = r.r;
   document.getElementById('rankChip').style.setProperty('--rank-color', r.color);
-  document.getElementById('xpLabel').textContent = `${xpVal} / 100`;
-  document.getElementById('xpFill').style.width = Math.min(100, (xpVal / 100) * 100) + '%';
+  document.getElementById('xpLabel').textContent = `${xpVal} / 100`; document.getElementById('xpFill').style.width = Math.min(100, (xpVal / 100) * 100) + '%';
   renderLeaderboard();
 }
 
 function renderHeatmap(){
-  const grid = document.getElementById('heatmapGrid');
-  if(!grid) return;
-  const days = [];
-  const curr = istNow();
-  for(let i=6; i>=0; i--){
-    const d = new Date(curr);
-    d.setDate(d.getDate() - i);
-    const dStr = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    days.push({
-      dateStr: dStr,
-      dayName: d.toLocaleDateString('en-US',{weekday:'narrow'}),
-      dayNum: d.getDate()
-    });
-  }
-
+  const grid = document.getElementById('heatmapGrid'); if(!grid) return; const days = []; const curr = istNow();
+  for(let i=6; i>=0; i--){ const d = new Date(curr); d.setDate(d.getDate() - i); const dStr = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); days.push({ dateStr: dStr, dayName: d.toLocaleDateString('en-US',{weekday:'narrow'}), dayNum: d.getDate() }); }
   grid.innerHTML = days.map(day => {
-    let statusClass = '';
-    let icon = '•';
-
-    const isCompleted = (day.dateStr === todayStr())
-      ? (data.quests.length > 0 && data.quests.every(q => q.completedToday))
-      : (data.history[day.dateStr] === 'completed');
-
-    if(isCompleted){
-      statusClass = 'active';
-      icon = '✓';
-    } else if(data.history[day.dateStr] === 'missed'){
-      statusClass = 'missed';
-      icon = '✕';
-    }
-
-    return `
-      <div class="heatmap-day ${statusClass}">
-        <div class="heatmap-date">${day.dayName} ${day.dayNum}</div>
-        <div class="heatmap-status">${icon}</div>
-      </div>
-    `;
+    let statusClass = ''; let icon = '•';
+    const isCompleted = (day.dateStr === todayStr()) ? (data.quests.length > 0 && data.quests.every(q => q.completedToday)) : (data.history[day.dateStr] === 'completed');
+    if(isCompleted){ statusClass = 'active'; icon = '✓'; } else if(data.history[day.dateStr] === 'missed'){ statusClass = 'missed'; icon = '✕'; }
+    return `<div class="heatmap-day ${statusClass}"><div class="heatmap-date">${day.dayName} ${day.dayNum}</div><div class="heatmap-status">${icon}</div></div>`;
   }).join('');
 }
 
-/* EXPORT & IMPORT BACKUP SYSTEM */
-function exportBackupData(){
-  if(!data) return;
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-  const downloadAnchor = document.createElement('a');
-  downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", `SYSTEM_BACKUP_${data.playerName}_${todayStr()}.json`);
-  document.body.appendChild(downloadAnchor);
-  downloadAnchor.click();
-  downloadAnchor.remove();
-  playSound('quest');
-  showSysWindow({tag:'[ SYSTEM ]',title:'BACKUP EXPORTED',tone:'normal',body:'Your progress has been exported as a JSON file.'});
-}
+function exportBackupData(){ if(!data) return; const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data)); const downloadAnchor = document.createElement('a'); downloadAnchor.setAttribute("href", dataStr); downloadAnchor.setAttribute("download", `SYSTEM_BACKUP_${data.playerName}_${todayStr()}.json`); document.body.appendChild(downloadAnchor); downloadAnchor.click(); downloadAnchor.remove(); playSound('quest'); showSysWindow({tag:'[ SYSTEM ]',title:'BACKUP EXPORTED',tone:'normal',body:'Your progress has been exported as a JSON file.'}); }
+function importBackupData(e){ const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(evt) { try { const importedData = JSON.parse(evt.target.result); if(importedData && importedData.playerName){ data = importedData; currentUser = data.playerName; uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100; localStorage.setItem(CURRENT_USER_KEY, currentUser); saveData(); render(); playSound('levelup'); showSysWindow({tag:'[ SYSTEM ]',title:'DATA RESTORED',tone:'gold',body:`Successfully restored progress for hunter <b>${currentUser}</b>!`}); } else throw new Error(); } catch(err) { playSound('alert'); showSysWindow({tag:'[ SYSTEM ]',title:'IMPORT FAILED',tone:'danger',body:'Invalid backup file format.'}); } }; reader.readAsText(file); }
 
-function importBackupData(e){
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt) {
-    try {
-      const importedData = JSON.parse(evt.target.result);
-      if(importedData && importedData.playerName){
-        data = importedData;
-        currentUser = data.playerName;
-        uiXP = data.xp;
-        uiLevel = data.level;
-        uiMaxXP = 100;
-        localStorage.setItem(CURRENT_USER_KEY, currentUser);
-        saveData();
-        render();
-        playSound('levelup');
-        showSysWindow({tag:'[ SYSTEM ]',title:'DATA RESTORED',tone:'gold',body:`Successfully restored progress for hunter <b>${currentUser}</b>!`});
-      } else {
-        throw new Error();
-      }
-    } catch(err) {
-      playSound('alert');
-      showSysWindow({tag:'[ SYSTEM ]',title:'IMPORT FAILED',tone:'danger',body:'Invalid backup file format.'});
-    }
-  };
-  reader.readAsText(file);
-}
-
-/* JOURNAL FUNCTIONS */
-function ensureJournal(){
-  if(!data.journal || typeof data.journal!=='object' || Array.isArray(data.journal)) data.journal={};
-}
-function loadDailyJournal(targetDate = null){
-  ensureJournal();
-  const t = targetDate || todayStr();
-  editingJournalDate = t;
-  document.getElementById('dailyJournalInput').value = data.journal[t] || '';
-  document.getElementById('dailyDateLabel').textContent = formatDate(t) + (t === todayStr() ? ' (TODAY)' : ' (EDITING)');
-
-  const saveBtn = document.getElementById('saveDailyJournal');
-  if(saveBtn) {
-    saveBtn.textContent = (t === todayStr()) ? 'SAVE TODAY' : 'UPDATE JOURNAL';
-  }
-}
-function saveDailyJournal(){
-  if(!data || !currentUser)return;
-  ensureJournal();
-  const t = editingJournalDate || todayStr();
-  const text = document.getElementById('dailyJournalInput').value.trim();
-  if(text) data.journal[t] = text;
-  else delete data.journal[t];
-  saveData();
-  loadDailyJournal(todayStr());
-  renderDailyJournal();
-  playSound('quest');
-  showSysWindow({tag:'[ DAILY JOURNAL ]',title:'SAVED',tone:'normal',body:'Your entry for <b>'+formatDate(t)+'</b> has been saved.'});
-}
-function deleteDailyJournal(d){
-  if(confirm('Are you sure you want to delete the journal entry for ' + formatDate(d) + '?')){
-    ensureJournal();
-    delete data.journal[d];
-    saveData();
-    if(editingJournalDate === d){
-      loadDailyJournal(todayStr());
-    }
-    renderDailyJournal();
-  }
-}
-function clearDailyJournal(){
-  editingJournalDate = todayStr();
-  document.getElementById('dailyJournalInput').value = '';
-  loadDailyJournal(todayStr());
-}
+function ensureJournal(){ if(!data.journal || typeof data.journal!=='object' || Array.isArray(data.journal)) data.journal={}; }
+function loadDailyJournal(targetDate = null){ ensureJournal(); const t = targetDate || todayStr(); editingJournalDate = t; document.getElementById('dailyJournalInput').value = data.journal[t] || ''; document.getElementById('dailyDateLabel').textContent = formatDate(t) + (t === todayStr() ? ' (TODAY)' : ' (EDITING)'); const saveBtn = document.getElementById('saveDailyJournal'); if(saveBtn) saveBtn.textContent = (t === todayStr()) ? 'SAVE TODAY' : 'UPDATE JOURNAL'; }
+function saveDailyJournal(){ if(!data || !currentUser)return; ensureJournal(); const t = editingJournalDate || todayStr(); const text = document.getElementById('dailyJournalInput').value.trim(); if(text) data.journal[t] = text; else delete data.journal[t]; saveData(); loadDailyJournal(todayStr()); renderDailyJournal(); playSound('quest'); showSysWindow({tag:'[ DAILY JOURNAL ]',title:'SAVED',tone:'normal',body:'Your entry for <b>'+formatDate(t)+'</b> has been saved.'}); }
+function deleteDailyJournal(d){ if(confirm('Are you sure you want to delete the journal entry for ' + formatDate(d) + '?')){ ensureJournal(); delete data.journal[d]; saveData(); if(editingJournalDate === d) loadDailyJournal(todayStr()); renderDailyJournal(); } }
+function clearDailyJournal(){ editingJournalDate = todayStr(); document.getElementById('dailyJournalInput').value = ''; loadDailyJournal(todayStr()); }
 function renderDailyJournal(){
-  ensureJournal();
-  if(!editingJournalDate) loadDailyJournal(todayStr());
-  const entries = Object.keys(data.journal).sort().reverse();
-  const el = document.getElementById('dailyJournalHistory');
-  if(!entries.length){
-    el.innerHTML = '<div class="emptystate">No journal entries yet.<br>Write about your day above.</div>';
-    return;
-  }
-  el.innerHTML = entries.map(d => `
-    <div class="logitem" style="position:relative;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div class="t" style="color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:bold;">${formatDate(d)}</div>
-        <div style="display:flex; gap:8px;">
-          <button data-edit-j="${d}" style="background:rgba(74,168,255,.1); border:1px solid var(--border-bright); color:var(--accent); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">EDIT</button>
-          <button data-del-j="${d}" style="background:rgba(255,84,104,.1); border:1px solid var(--danger); color:var(--danger); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">DEL</button>
-        </div>
-      </div>
-      <div style="font-size:13.5px; color:var(--text-dim); line-height:1.55; margin-top:8px; white-space:pre-wrap">${escapeHtml(data.journal[d])}</div>
-    </div>`).join('');
-
-  el.querySelectorAll('[data-edit-j]').forEach(btn => {
-    btn.onclick = () => loadDailyJournal(btn.dataset.editJ);
-  });
-  el.querySelectorAll('[data-del-j]').forEach(btn => {
-    btn.onclick = () => deleteDailyJournal(btn.dataset.delJ);
-  });
+  ensureJournal(); if(!editingJournalDate) loadDailyJournal(todayStr()); const entries = Object.keys(data.journal).sort().reverse(); const el = document.getElementById('dailyJournalHistory');
+  if(!entries.length){ el.innerHTML = '<div class="emptystate">No journal entries yet.<br>Write about your day above.</div>'; return; }
+  el.innerHTML = entries.map(d => `<div class="logitem" style="position:relative;"><div style="display:flex; justify-content:space-between; align-items:center;"><div class="t" style="color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:bold;">${formatDate(d)}</div><div style="display:flex; gap:8px;"><button data-edit-j="${d}" style="background:rgba(74,168,255,.1); border:1px solid var(--border-bright); color:var(--accent); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">EDIT</button><button data-del-j="${d}" style="background:rgba(255,84,104,.1); border:1px solid var(--danger); color:var(--danger); font-family:Orbitron,sans-serif; font-size:9px; padding:4px 8px; cursor:pointer;">DEL</button></div></div><div style="font-size:13.5px; color:var(--text-dim); line-height:1.55; margin-top:8px; white-space:pre-wrap">${escapeHtml(data.journal[d])}</div></div>`).join('');
+  el.querySelectorAll('[data-edit-j]').forEach(btn => btn.onclick = () => loadDailyJournal(btn.dataset.editJ)); el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
 }
 
-function renderUI(){
-  document.getElementById('playerName').textContent=data.playerName;
-  document.getElementById('userNameTop').textContent=data.playerName;
-  updateXPBarUI(data.level, data.xp, 100);
-  renderStatus();
-  renderHeatmap();
-}
-
-function render(){
-  renderUI();
-  renderQuests();
-  renderLog();
-  renderDailyJournal();
-  animateXPOnStatusTab();
-  tick();
-}
-
+function renderUI(){ document.getElementById('playerName').textContent=data.playerName; document.getElementById('userNameTop').textContent=data.playerName; updateXPBarUI(data.level, data.xp, 100); renderStatus(); renderHeatmap(); }
+function render(){ renderUI(); renderQuests(); renderLog(); renderDailyJournal(); animateXPOnStatusTab(); tick(); }
 function renderStatus(){const done=data.quests.filter(q=>q.completedToday).length;document.getElementById('progressCount').innerHTML=`<b>${done}</b> / ${data.quests.length} quests cleared today`;document.getElementById('statusQuestList').innerHTML=data.quests.length?data.quests.map(q=>`<div class="tinyquest ${q.completedToday?'done':''}"><div class="icon">${q.icon}</div><div class="info"><div class="tn">${escapeHtml(q.name)}</div><div class="tmeta">Started ${formatDate(q.startDate)} · Day ${daysSince(q.startDate)} · <b>${q.totalDays}</b> completed · +${q.xp} XP</div></div>${q.completedToday?'<div class="tag-done">✓ DONE</div>':''}</div>`).join(''):'<div class="emptystate">No quests assigned. Add some in the Quests tab.</div>'}
 
 function renderQuests(){
   const e=document.getElementById('questList');
-  if(!data.quests.length){
-    e.innerHTML='<div class="emptystate">No active quests.<br>Tap + ADD to assign one.</div>';
-    return;
-  }
-
+  if(!data.quests.length){ e.innerHTML='<div class="emptystate">No active quests.<br>Tap + ADD to assign one.</div>'; return; }
   const isAllDone = data.quests.length > 0 && data.quests.every(q => q.completedToday);
-
-  e.innerHTML=data.quests.map(q=>`
-    <div class="quest ${q.completedToday?'done':''} ${isAllDone?'locked':''}">
-      <div class="icon">${q.icon}</div>
-      <div class="info">
-        <div class="qname">${escapeHtml(q.name)}</div>
-        <div class="qmeta">+${q.xp} XP ${q.streak>0?`<span class="streak">🔥${q.streak}</span>`:''}</div>
-        <div class="qdays">Started ${formatDate(q.startDate)} · Day ${daysSince(q.startDate)} · ${q.totalDays} completed</div>
-      </div>
-      <div class="check" data-complete="${q.id}">${q.completedToday?(isAllDone?'🔒':'✓'):''}</div>
-      <div class="qedit" data-edit="${q.id}">✎</div>
-      <div class="qremove" data-remove="${q.id}">✕</div>
-    </div>`).join('');
-
-  e.querySelectorAll('[data-complete]').forEach(x=>x.onclick=()=>completeQuest(x.dataset.complete));
+  e.innerHTML=data.quests.map(q=>`<div class="quest ${q.completedToday?'done':''} ${isAllDone?'locked':''}"><div class="icon">${q.icon}</div><div class="info"><div class="qname">${escapeHtml(q.name)}</div><div class="qmeta">+${q.xp} XP ${q.streak>0?`<span class="streak">🔥${q.streak}</span>`:''}</div><div class="qdays">Started ${formatDate(q.startDate)} · Day ${daysSince(q.startDate)} · ${q.totalDays} completed</div></div><div class="check" data-complete="${q.id}">${q.completedToday?(isAllDone?'🔒':'✓'):''}</div><div class="qedit" data-edit="${q.id}">✎</div><div class="qremove" data-remove="${q.id}">✕</div></div>`).join('');
+  
+  e.querySelectorAll('[data-complete]').forEach(x=>x.onclick=(evt)=>completeQuest(x.dataset.complete, evt));
   e.querySelectorAll('[data-edit]').forEach(x=>x.onclick=()=>openRename(x.dataset.edit));
   e.querySelectorAll('[data-remove]').forEach(x=>x.onclick=()=>removeQuest(x.dataset.remove));
 }
@@ -1010,33 +560,17 @@ document.getElementById('passwordInput').onkeydown=e=>{if(e.key==='Enter')loginW
 
 document.getElementById('openAdd').onclick=openAddModal;document.getElementById('addClose').onclick=closeAddModal;document.getElementById('renameCancel').onclick=closeRename;document.getElementById('renameSave').onclick=saveRename;document.getElementById('renameInput').onkeydown=e=>{if(e.key==='Enter')saveRename()};
 document.getElementById('switchHunterBtn').onclick=logoutUser;
-
 document.getElementById('saveDailyJournal').addEventListener('click', saveDailyJournal);
 document.getElementById('clearDailyJournal').addEventListener('click', clearDailyJournal);
-
-/* BACKUP EVENT LISTENERS */
 document.getElementById('exportDataBtn').onclick = exportBackupData;
 document.getElementById('importDataBtn').onclick = () => document.getElementById('importFileInput').click();
 document.getElementById('importFileInput').onchange = importBackupData;
+document.getElementById('resetDataBtn').onclick=()=>{ if(confirm('Reset TODAY\'S progress for '+data.playerName+'? (Past days will be saved)')) resetTodayData(); };
 
-/* RESET TODAY ONLY EVENT LISTENERS */
-document.getElementById('resetDataBtn').onclick=()=>{
-  if(confirm('Reset TODAY\'S progress for '+data.playerName+'? (Past days will be saved)')){
-    resetTodayData();
-  }
-};
-
-/* TAB SWITCHING EVENTS */
 document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  t.classList.add('active');
-  document.querySelectorAll('.tabpanel').forEach(x=>x.style.display='none');
-  document.getElementById('tab-'+t.dataset.tab).style.display='block';
-
-  if(t.dataset.tab === 'status'){
-    renderUI();
-    animateXPOnStatusTab();
-  }
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+  document.querySelectorAll('.tabpanel').forEach(x=>x.style.display='none'); document.getElementById('tab-'+t.dataset.tab).style.display='block';
+  if(t.dataset.tab === 'status'){ renderUI(); animateXPOnStatusTab(); }
 });
 
 boot();
