@@ -208,6 +208,7 @@ const TEMPLATES=[
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
 let isAdminMode=false, unsubHunter = null, unsubChat = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false, chatMessagesCache = [];
+let levelUpPending = false; // Flag to force level up popup on status tab
 
 /* SPARK PARTICLES EFFECT */
 function spawnParticles(x, y) {
@@ -472,6 +473,7 @@ function completeQuest(id, evt){
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
+    levelUpPending = true; // Flag activated!
   }
 
   showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
@@ -517,9 +519,10 @@ function tick(){
 
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
-  
-  // FORCE LEVEL UP POPUP WHEN STATUS TAB IS OPENED AND LEVEL IS HIGHER
-  if(uiLevel < data.level) {
+
+  // CHECK PENDING LEVEL UP WHEN STATUS TAB OPENS
+  if(levelUpPending || uiLevel < data.level) {
+    levelUpPending = false;
     uiLevel = data.level;
     uiXP = data.xp;
     updateXPBarUI(uiLevel, uiXP, 100);
@@ -538,7 +541,7 @@ function animateXPOnStatusTab(){
         if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
         isAnimatingXP = false;
       }, 1300);
-    }, 250);
+    }, 200);
     return;
   }
 
