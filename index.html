@@ -518,9 +518,10 @@ function tick(){
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
   
-  // DIRECT LEVEL UP CHECK: If UI level is behind actual data level, trigger level up popup immediately when Status tab opens!
+  // FORCE LEVEL UP POPUP WHEN STATUS TAB IS OPENED AND LEVEL IS HIGHER
   if(uiLevel < data.level) {
-    uiXP = 100;
+    uiLevel = data.level;
+    uiXP = data.xp;
     updateXPBarUI(uiLevel, uiXP, 100);
     isAnimatingXP = true;
     
@@ -530,17 +531,14 @@ function animateXPOnStatusTab(){
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-      uiLevel = data.level;
       const newRankObj = rankFor(uiLevel);
       showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
       
       setTimeout(() => { 
         if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
-        uiXP = data.xp; 
-        updateXPBarUI(uiLevel, uiXP, 100); 
         isAnimatingXP = false;
       }, 1300);
-    }, 200);
+    }, 250);
     return;
   }
 
