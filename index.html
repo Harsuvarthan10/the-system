@@ -208,7 +208,6 @@ const TEMPLATES=[
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
 let isAdminMode=false, unsubHunter = null, unsubChat = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false, chatMessagesCache = [];
-let pendingLevelUpNotice = false;
 
 /* SPARK PARTICLES EFFECT */
 function spawnParticles(x, y) {
@@ -433,7 +432,12 @@ function applyDailyReset(){
 
 function gainXP(a){
   data.xp += a; let up = false, oldRank = rankFor(data.level).r;
-  if(data.xp >= 100){ data.xp = 0; data.level++; data.lastLeveledDate = todayStr(); up = true; }
+  if(data.xp >= 100){ 
+    data.xp = 0; 
+    data.level++; 
+    data.lastLeveledDate = todayStr(); 
+    up = true; 
+  }
   return {leveledUp: up, newRank: rankFor(data.level).r !== oldRank ? rankFor(data.level).r : null};
 }
 
@@ -461,15 +465,13 @@ function completeQuest(id, evt){
   setTimeout(() => document.body.classList.remove('shake-active'), 400);
 
   const r = gainXP(q.xp);
-  uiLevel = data.level;
-
+  
   data.log.unshift({date:todayStr(),text:`Completed "${q.name}" — +${q.xp} XP`,type:'normal'}); data.log=data.log.slice(0,40);
   saveData(); renderQuests(); renderStatus(); renderHeatmap();
 
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
-    pendingLevelUpNotice = true; 
   }
 
   showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
@@ -515,53 +517,48 @@ function tick(){
 
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
-  if(uiLevel === data.level && uiXP === data.xp) { 
-    updateXPBarUI(uiLevel, uiXP, 100); 
-    if(pendingLevelUpNotice) {
-      pendingLevelUpNotice = false;
+  
+  // DIRECT LEVEL UP CHECK: If UI level is behind actual data level, trigger level up popup immediately when Status tab opens!
+  if(uiLevel < data.level) {
+    uiXP = 100;
+    updateXPBarUI(uiLevel, uiXP, 100);
+    isAnimatingXP = true;
+    
+    setTimeout(() => {
       const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
       playSound('levelup');
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
-      const newRankObj = rankFor(data.level);
-      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Power increased successfully!` });
-      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
-    }
+
+      uiLevel = data.level;
+      const newRankObj = rankFor(uiLevel);
+      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
+      
+      setTimeout(() => { 
+        if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
+        uiXP = data.xp; 
+        updateXPBarUI(uiLevel, uiXP, 100); 
+        isAnimatingXP = false;
+      }, 1300);
+    }, 200);
+    return;
+  }
+
+  if(uiLevel === data.level && uiXP === data.xp) { 
+    updateXPBarUI(uiLevel, uiXP, 100); 
     return; 
   }
+
   isAnimatingXP = true; playSound('xpcharge');
 
   const timer = setInterval(() => {
-    let targetXP = (uiLevel < data.level) ? 100 : data.xp;
+    let targetXP = data.xp;
     if(uiXP < targetXP) { uiXP = Math.min(targetXP, uiXP + Math.max(1, Math.ceil((targetXP - uiXP) / 6))); updateXPBarUI(uiLevel, uiXP, 100); }
-    else if(uiXP > targetXP && uiLevel === data.level) { uiXP = Math.max(targetXP, uiXP - Math.max(1, Math.ceil((uiXP - targetXP) / 6))); updateXPBarUI(uiLevel, uiXP, 100); }
+    else if(uiXP > targetXP) { uiXP = Math.max(targetXP, uiXP - Math.max(1, Math.ceil((uiXP - targetXP) / 6))); updateXPBarUI(uiLevel, uiXP, 100); }
 
-    if(uiXP >= 100 && uiLevel < data.level) {
-      clearInterval(timer); isAnimatingXP = false;
-      const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
-      playSound('levelup');
-      
-      document.body.classList.add('shake-active');
-      setTimeout(() => document.body.classList.remove('shake-active'), 600);
-
-      uiLevel++; const newRankObj = rankFor(uiLevel);
-      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
-      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); uiXP = 0; updateXPBarUI(uiLevel, uiXP, 100); setTimeout(() => { animateXPOnStatusTab(); }, 300); }, 1300);
-      return;
-    }
-    if(uiXP === targetXP && uiLevel === data.level) { 
+    if(uiXP === targetXP) { 
       clearInterval(timer); 
       isAnimatingXP = false; 
-      if(pendingLevelUpNotice) {
-        pendingLevelUpNotice = false;
-        const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
-        playSound('levelup');
-        document.body.classList.add('shake-active');
-        setTimeout(() => document.body.classList.remove('shake-active'), 600);
-        const newRankObj = rankFor(data.level);
-        showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Power increased successfully!` });
-        setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
-      }
     }
   }, 40);
 }
