@@ -78,6 +78,9 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .chat-msg-header{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);margin-bottom:4px;}
 .chat-msg-user{color:var(--accent);font-weight:bold;}
 .chat-msg-text{color:var(--text);word-break:break-word;line-height:1.4;}
+.chat-actions{display:flex;gap:6px;margin-top:4px;font-size:10px;font-family:'Orbitron',sans-serif;}
+.chat-act-btn{color:var(--accent);cursor:pointer;background:none;border:none;padding:0;font-size:9px;}
+.chat-act-del{color:var(--danger);cursor:pointer;background:none;border:none;padding:0;font-size:9px;}
 .chat-input-row{display:flex;gap:6px;margin-top:8px;}
 .chat-input{flex:1;padding:10px;background:var(--panel);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:14px;outline:none;}
 .chat-send{padding:0 16px;font-family:Orbitron,sans-serif;font-size:11px;background:var(--accent);color:#05070c;border:none;cursor:pointer;font-weight:bold;}
@@ -205,6 +208,7 @@ const TEMPLATES=[
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
 let isAdminMode=false, unsubHunter = null, unsubChat = null, uiXP = 0, uiLevel = 1, uiMaxXP = 100, isAnimatingXP = false, chatMessagesCache = [];
+let pendingLevelUpNotice = false; // Flag for Status tab popup
 
 /* SPARK PARTICLES EFFECT */
 function spawnParticles(x, y) {
@@ -311,7 +315,7 @@ function fmtHMS(ms){ms=Math.max(0,ms);let h=Math.floor(ms/36e5),m=Math.floor(ms%
 function formatDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-IN',{month:'short',day:'numeric',year:'numeric'})}
 function daysSince(s){if(!s)return 0;const a=new Date(s+'T00:00:00'),b=new Date(todayStr()+'T00:00:00');return Math.max(1,Math.floor((b-a)/86400000)+1)}
 function redistributeXP(){const n=data.quests.length;if(!n)return;const base=Math.floor(100/n),rem=100-base*n;data.quests.forEach((q,i)=>q.xp=base+(i<rem?1:0))}
-function defaultData(name, pass=""){const t=todayStr();return{playerName:name,password:pass,level:1,xp:0,xpToNext:100,lastLeveledDate:null,quests:[{id:cid(),name:'Workout / Training',xp:25,icon:'💪',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Study Session',xp:25,icon:'📖',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Sleep 7+ Hours',xp:25,icon:'🌙',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Meditate / Focus',icon:'🧘',xp:25,streak:0,totalDays:0,completedToday:false,startDate:t}],lastActiveDate:t,warningShownDate:null,deadlineAlertShownDate:null,history:{},log:[{date:t,text:'System initialized. Welcome, '+name+'.',type:'normal'}]}}
+function defaultData(name, pass=""){const t=todayStr();return{playerName:name,password:pass,level:1,xp:0,xpToNext:100,lastLeveledDate:null,quests:[{id:cid(),name:'Workout / Training',xp:25,icon:'💪',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Study Session',xp:25,icon:'📖',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Sleep 7+ Hours',xp:25,icon:'🌙',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Meditate / Focus',icon:'🧘',xp:25,streak:0,totalDays:0,completedToday:false,startDate:t}],lastActiveDate:t,warningShownDate:null,deadlineAlertShownDate:null,morningAlertShownDate:null,history:{},log:[{date:t,text:'System initialized. Welcome, '+name+'.',type:'normal'}]}}
 function safeParse(v,f){try{return JSON.parse(v)}catch(e){return f}}
 
 function rankFor(l){
@@ -373,7 +377,7 @@ function loadProfile(name, password=""){
   data.playerName=name; data.xpToNext=100; data.lastLeveledDate=data.lastLeveledDate||null;
   data.quests=(data.quests||[]).map(q=>({...q,id:q.id||cid(),xp:q.xp||0,icon:q.icon||'🎯',streak:q.streak||0,totalDays:q.totalDays||0,completedToday:!!q.completedToday,startDate:q.startDate||todayStr()}));
   data.lastActiveDate=data.lastActiveDate||todayStr(); data.log=data.log||[]; data.history=data.history||{}; ensureJournal();
-  data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null;
+  data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null; data.morningAlertShownDate=data.morningAlertShownDate||null;
   uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100;
   redistributeXP(); applyDailyReset(); saveData();
   if(db){
@@ -412,7 +416,7 @@ function resetTodayData(){
   data.quests.forEach(q => { if(q.completedToday){ todayXPGained += q.xp; q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); } });
   if(data.lastLeveledDate === t){ data.level = Math.max(1, data.level - 1); data.xp = Math.max(0, 100 - todayXPGained); data.lastLeveledDate = null; } else { data.xp = Math.max(0, data.xp - todayXPGained); }
   if(data.history) delete data.history[t]; if(data.journal) delete data.journal[t];
-  data.warningShownDate = null; data.deadlineAlertShownDate = null;
+  data.warningShownDate = null; data.deadlineAlertShownDate = null; data.morningAlertShownDate = null;
   if(data.log) data.log = data.log.filter(l => l.date !== t); else data.log = [];
   data.log.unshift({date: t, text: "Reset today's progress & logs.", type: 'penalty'}); data.log = data.log.slice(0, 40);
   uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100; saveData(); render(); playSound('alert');
@@ -424,7 +428,7 @@ function applyDailyReset(){
   const incomplete=data.quests.filter(q=>!q.completedToday);
   if(incomplete.length){ incomplete.forEach(q=>q.streak=0); data.history[data.lastActiveDate] = 'missed'; data.log.unshift({date:t,text:`Missed ${incomplete.length} quest(s). Previous day was not counted.`,type:'penalty'}); }
   else if(data.quests.length > 0) data.history[data.lastActiveDate] = 'completed';
-  data.quests.forEach(q=>q.completedToday=false); data.lastActiveDate=t; data.warningShownDate=null; data.deadlineAlertShownDate=null; data.log=data.log.slice(0,40);
+  data.quests.forEach(q=>q.completedToday=false); data.lastActiveDate=t; data.warningShownDate=null; data.deadlineAlertShownDate=null; data.morningAlertShownDate=null; data.log=data.log.slice(0,40);
 }
 
 function gainXP(a){
@@ -465,18 +469,10 @@ function completeQuest(id, evt){
   if(r.leveledUp) { 
     data.log.unshift({date:todayStr(),text:`Leveled up to LV ${data.level}${r.newRank?' — Rank '+r.newRank+'!':''}`,type:'levelup'}); 
     saveData(); 
-    setTimeout(() => {
-      const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
-      playSound('levelup');
-      document.body.classList.add('shake-active');
-      setTimeout(() => document.body.classList.remove('shake-active'), 600);
-      const newRankObj = rankFor(data.level);
-      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! All quests cleared and power increased!` });
-      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
-    }, 300);
-  } else {
-    showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
+    pendingLevelUpNotice = true; // Mark for Status tab popup
   }
+
+  showSysWindow({ tag:'[ QUEST CLEARED ]', title:'QUEST COMPLETE', tone:'normal', body: allDone ? `<b>ALL DAILY QUESTS CLEARED!</b><br>Quests are now locked until tomorrow.` : `<b>+${q.xp} XP</b> gained!<br>Open <b>STATUS Tab</b> to see your power rise.` });
 }
 
 function removeQuest(id){if(!confirm('Remove this quest?'))return;data.quests=data.quests.filter(q=>q.id!==id);redistributeXP();saveData();render()}
@@ -496,6 +492,13 @@ function tick(){
   if (isLate && hasIncomplete) document.body.classList.add('penalty-mode');
   else document.body.classList.remove('penalty-mode');
 
+  // MORNING QUEST STARTED NOTIFICATION (Triggers between 6 AM and 11 AM)
+  if(now.getHours() >= 6 && now.getHours() < 12 && data.morningAlertShownDate !== todayStr()){
+    data.morningAlertShownDate = todayStr(); saveData(); playSound('quest');
+    showSysWindow({ tag:'[ DAILY AWAKENING ]', title:'QUESTS STARTED', tone:'normal', body:`<b>Daily Quests have officially begun!</b><br>Good morning, Hunter ${data.playerName}. Prepare for today's trials.` });
+    if ("Notification" in window && Notification.permission === "granted") new Notification("[ THE SYSTEM ]", { body: `Good morning Hunter ${data.playerName}! Daily quests are active.`, icon: "https://cdn-icons-png.flaticon.com/512/1827/1827504.png" });
+  }
+
   if(now.getHours()>=ALERT_HOUR && now.getHours()<DEADLINE_HOUR && data.warningShownDate!==todayStr()){
     const inc=data.quests.filter(q=>!q.completedToday);
     if(inc.length){
@@ -513,7 +516,21 @@ function tick(){
 
 function animateXPOnStatusTab(){
   if(isAnimatingXP) return;
-  if(uiLevel === data.level && uiXP === data.xp) { updateXPBarUI(uiLevel, uiXP, 100); return; }
+  if(uiLevel === data.level && uiXP === data.xp) { 
+    updateXPBarUI(uiLevel, uiXP, 100); 
+    // Trigger pending level up popup once status tab is active and animation matches
+    if(pendingLevelUpNotice) {
+      pendingLevelUpNotice = false;
+      const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
+      playSound('levelup');
+      document.body.classList.add('shake-active');
+      setTimeout(() => document.body.classList.remove('shake-active'), 600);
+      const newRankObj = rankFor(data.level);
+      showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Power increased successfully!` });
+      setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
+    }
+    return; 
+  }
   isAnimatingXP = true; playSound('xpcharge');
 
   const timer = setInterval(() => {
@@ -534,7 +551,20 @@ function animateXPOnStatusTab(){
       setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); uiXP = 0; updateXPBarUI(uiLevel, uiXP, 100); setTimeout(() => { animateXPOnStatusTab(); }, 300); }, 1300);
       return;
     }
-    if(uiXP === targetXP && uiLevel === data.level) { clearInterval(timer); isAnimatingXP = false; }
+    if(uiXP === targetXP && uiLevel === data.level) { 
+      clearInterval(timer); 
+      isAnimatingXP = false; 
+      if(pendingLevelUpNotice) {
+        pendingLevelUpNotice = false;
+        const lvlWrap = document.getElementById('lvlWrap'); if(lvlWrap) lvlWrap.classList.add('lvl-pop');
+        playSound('levelup');
+        document.body.classList.add('shake-active');
+        setTimeout(() => document.body.classList.remove('shake-active'), 600);
+        const newRankObj = rankFor(data.level);
+        showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${data.level}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Power increased successfully!` });
+        setTimeout(() => { if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); }, 1300);
+      }
+    }
   }, 40);
 }
 
@@ -572,13 +602,17 @@ function renderDailyJournal(){
   el.querySelectorAll('[data-edit-j]').forEach(btn => btn.onclick = () => loadDailyJournal(btn.dataset.editJ)); el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
 }
 
-/* GUILD CHAT FUNCTIONS */
+/* GUILD CHAT FUNCTIONS WITH EDIT & DELETE */
 function initChatListener(){
   if(!db) return;
   if(unsubChat) unsubChat();
   unsubChat = db.collection("guild_chat").orderBy("timestamp", "asc").limit(50).onSnapshot(snapshot => {
     chatMessagesCache = [];
-    snapshot.forEach(doc => { chatMessagesCache.push(doc.data()); });
+    snapshot.forEach(doc => { 
+      let d = doc.data();
+      d.id = doc.id;
+      chatMessagesCache.push(d); 
+    });
     renderChatMessages();
   }, err => console.log(err));
 }
@@ -587,7 +621,6 @@ function sendGuildMessage(){
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if(!text || !currentUser || !data) return;
-  
   if(!db){ alert("Firebase offline. Chat is unavailable."); return; }
   
   const msgData = {
@@ -605,6 +638,25 @@ function sendGuildMessage(){
   });
 }
 
+function editGuildMessage(id, oldText){
+  const newText = prompt("Edit your message:", oldText);
+  if(newText === null) return;
+  const trimmed = newText.trim();
+  if(!trimmed) return;
+  if(!db) return;
+  db.collection("guild_chat").doc(id).update({ text: trimmed }).then(() => {
+    playSound('quest');
+  }).catch(err => alert("Permission denied or failed to edit."));
+}
+
+function deleteGuildMessage(id){
+  if(!confirm("Delete this message?")) return;
+  if(!db) return;
+  db.collection("guild_chat").doc(id).delete().then(() => {
+    playSound('alert');
+  }).catch(err => alert("Permission denied or failed to delete."));
+}
+
 function renderChatMessages(){
   const container = document.getElementById('chatMessages');
   if(!container) return;
@@ -614,11 +666,16 @@ function renderChatMessages(){
   }
   container.innerHTML = chatMessagesCache.map(m => {
     let rObj = rankFor(m.level || 1);
-    return `<div class="chat-msg">
+    let isOwner = (m.sender === currentUser);
+    return `<div class="chat-msg" data-msgid="${m.id}">
       <div class="chat-msg-header">
         <div><span class="chat-msg-user">${escapeHtml(m.sender)}</span> <span style="color:${rObj.color}; font-size:9px; margin-left:4px;">[${rObj.r} LV ${m.level || 1}]</span></div>
       </div>
       <div class="chat-msg-text">${escapeHtml(m.text)}</div>
+      ${isOwner ? `<div class="chat-actions">
+        <button class="chat-act-btn" onclick="editGuildMessage('${m.id}', \`${escapeHtml(m.text).replace(/`/g, '\\`')}\`)">EDIT</button> · 
+        <button class="chat-act-del" onclick="deleteGuildMessage('${m.id}')">DELETE</button>
+      </div>` : ''}
     </div>`;
   }).join('');
   container.scrollTop = container.scrollHeight;
