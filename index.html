@@ -5,17 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>THE SYSTEM</title>
 
-<!-- MOBILE HOME SCREEN ICON TAGS (PWA Ready) -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="THE SYSTEM">
 <meta name="theme-color" content="#05070c">
 
-<!-- Solo Leveling Style Blue-H Glow Icon -->
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
-<!-- FIREBASE SDK INCLUSION -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -179,7 +176,6 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 <div class="overlay" id="addOverlay"><div class="syswin hud-frame" style="max-width:380px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">NEW QUEST</div><div class="modal-scroll" id="templateList"></div><div class="syswin-close" id="addClose">CANCEL</div></div></div>
 <div class="overlay" id="renameOverlay"><div class="syswin hud-frame" style="max-width:360px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">RENAME QUEST</div><input type="text" class="login-input" id="renameInput" maxlength="30"><div style="display:flex;gap:10px"><div class="syswin-close" id="renameCancel" style="flex:1">CANCEL</div><div class="syswin-close ok" id="renameSave" style="flex:1">SAVE</div></div></div></div>
 
-<!-- CREDENTIALS EDIT OVERLAY -->
 <div class="overlay" id="credsOverlay">
   <div class="syswin hud-frame" style="max-width:360px">
     <div class="c3"></div><div class="c4"></div>
@@ -767,7 +763,7 @@ function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
-// CREDENTIALS CHANGE FUNCTIONS
+// CREDENTIALS CHANGE FUNCTIONS (UPDATED TO PREVENT NEW USER CREATION)
 function openCredsModal(){
   if(!data) return;
   document.getElementById('newUsernameInput').value = data.playerName;
@@ -785,14 +781,18 @@ function saveCredsModal(){
   const oldKey = keyName(currentUser);
   const newKey = keyName(newName);
 
-  // If username changed, delete old storage profile key and create new
+  // Remove old local profile and cloud record if username changed
   if(oldKey !== newKey){
     localStorage.removeItem(profileKey(currentUser));
     if(db) db.collection("hunters").doc(oldKey).delete().catch(e=>console.log(e));
   }
 
+  // Update current user data directly preserving level, xp and quests
   data.playerName = newName;
   data.password = newPass;
+  
+  // Remove old key from registry cache and update with new name
+  registryCache = registryCache.filter(h => h.key !== oldKey);
   currentUser = newName;
   localStorage.setItem(CURRENT_USER_KEY, currentUser);
 
