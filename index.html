@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>THE SYSTEM</title>
 
+<!-- MOBILE HOME SCREEN ICON TAGS (PWA Ready) -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="THE SYSTEM">
 <meta name="theme-color" content="#05070c">
 
+<!-- Solo Leveling Style Blue-H Glow Icon -->
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
+<!-- FIREBASE SDK INCLUSION -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -227,7 +230,7 @@ const WEEKLY_VIDEOS = [
   "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4", // 3: Wednesday
   "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",  // 4: Thursday
   "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",    // 5: Friday
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4"   // 6: Saturday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4"    // 6: Saturday
 ];
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
@@ -391,7 +394,7 @@ function renderLeaderboard(){
   lb.innerHTML = sorted.map((h, idx) => { let rObj = rankFor(h.level || 1); return `<div class="lb-row"><div style="font-family:'Orbitron',sans-serif; font-size:11px; color:var(--text-faint); width:18px; text-align:center;">#${idx+1}</div><div class="lb-info"><div class="lb-name">${escapeHtml(h.name)}</div><div class="lb-meta">XP: ${h.xp || 0} / 100</div></div><div class="lb-rank" style="color:${rObj.color}; border-color:${rObj.color}">${rObj.r}</div><div class="lb-lvl">LV ${h.level || 1}</div></div>`; }).join('');
 }
 
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;}[m]))}
 function saveData(){ if(!currentUser||!data)return false; try{ localStorage.setItem(profileKey(currentUser),JSON.stringify(data)); updateRegistry(); if(db)db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e)); return true; }catch(e){ showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Storage full or unavailable.'}); return false; } }
 
 function loadProfile(name, password=""){
@@ -763,7 +766,7 @@ function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
-// CREDENTIALS CHANGE FUNCTIONS (UPDATED TO PREVENT NEW USER CREATION)
+// CREDENTIALS CHANGE FUNCTIONS
 function openCredsModal(){
   if(!data) return;
   document.getElementById('newUsernameInput').value = data.playerName;
@@ -781,17 +784,14 @@ function saveCredsModal(){
   const oldKey = keyName(currentUser);
   const newKey = keyName(newName);
 
-  // Remove old local profile and cloud record if username changed
   if(oldKey !== newKey){
     localStorage.removeItem(profileKey(currentUser));
     if(db) db.collection("hunters").doc(oldKey).delete().catch(e=>console.log(e));
   }
 
-  // Update current user data directly preserving level, xp and quests
   data.playerName = newName;
   data.password = newPass;
   
-  // Remove old key from registry cache and update with new name
   registryCache = registryCache.filter(h => h.key !== oldKey);
   currentUser = newName;
   localStorage.setItem(CURRENT_USER_KEY, currentUser);
