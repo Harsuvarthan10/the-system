@@ -80,9 +80,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .chat-act-del{color:var(--danger);cursor:pointer;background:none;border:none;padding:0;font-size:10px;}
 .chat-input-row{display:flex;gap:6px;margin-top:8px;}
 .chat-input{flex:1;padding:10px;background:var(--panel);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:14px;outline:none;}
-.chat-send{padding:0 14px;font-family:Orbitron,sans-serif;font-size:10.5px;background:var(--accent);color:#05070c;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;justify-content:center;}
-.chat-mic-btn{padding:0 12px;font-family:Orbitron,sans-serif;font-size:14px;background:var(--panel);border:1px solid var(--border-bright);color:var(--accent);cursor:pointer;}
-.chat-mic-btn.recording{background:var(--danger);color:#fff;border-color:var(--danger);animation: redPulse 1s infinite alternate;}
+.chat-send{padding:0 16px;font-family:Orbitron,sans-serif;font-size:11px;background:var(--accent);color:#05070c;border:none;cursor:pointer;font-weight:bold;}
 
 .overlay{position:fixed;inset:0;background:rgba(2,4,10,.75);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}.overlay.show{opacity:1;pointer-events:auto}.syswin{width:100%;max-width:360px;background:linear-gradient(180deg,rgba(12,17,32,.98),rgba(8,12,22,.98));border:1px solid var(--accent);box-shadow:0 0 0 1px rgba(74,168,255,.15),0 0 40px rgba(74,168,255,.25);padding:22px 20px;transform:scale(.9);transition:transform .25s}.overlay.show .syswin{transform:scale(1)}.syswin.gold{border-color:var(--gold)}.syswin.danger{border-color:var(--danger)}.syswin-tag{font-family:Orbitron,sans-serif;font-size:10px;letter-spacing:3px;color:var(--text-faint);text-align:center;margin-bottom:10px}.syswin-title{font-family:Orbitron,sans-serif;font-size:22px;font-weight:900;text-align:center;color:var(--accent);margin-bottom:14px;letter-spacing:1px}.syswin.gold .syswin-title{color:var(--gold)}.syswin.danger .syswin-title{color:var(--danger)}.syswin-body{font-size:14.5px;color:var(--text);line-height:1.6;text-align:center;margin-bottom:16px}.syswin-body b{color:var(--accent);font-family:JetBrains Mono,monospace}.syswin-close{display:block;width:100%;text-align:center;padding:11px;margin-top:4px;font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:2px;border:1px solid var(--border-bright);color:var(--accent);background:rgba(74,168,255,.06);cursor:pointer;user-select:none}.syswin-close.danger{color:var(--danger)}.syswin-close.ok{color:var(--success);border-color:var(--success)}.template{display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:7px;background:var(--panel-2);border:1px solid var(--border);cursor:pointer}.template .icon{font-size:18px;width:24px;text-align:center}.template .tn{font-size:14px;color:var(--text);font-weight:600;flex:1}.template .ts{font-size:10px;color:var(--text-faint);font-family:JetBrains Mono,monospace}.modal-scroll{max-height:50vh;overflow-y:auto;margin:4px 0 12px}::-webkit-scrollbar{width:0;height:0}
 .heatmap-grid{display:flex;justify-content:space-between;gap:6px;margin-top:10px;}
@@ -152,13 +150,9 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
   <div class="panel hud-frame">
     <div class="c3"></div><div class="c4"></div>
     <div class="qhead"><p class="panel-title" style="margin:0">DAILY <b>JOURNAL</b></p><div id="dailyDateLabel" style="font-family:JetBrains Mono,monospace;font-size:10px;color:var(--text-faint)"></div></div>
-    <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:12px">Write about your day or use voice typing. Your journal is saved separately for each date.</div>
-    <textarea id="dailyJournalInput" style="width:100%;min-height:220px;resize:vertical;padding:14px;background:var(--panel-2);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:15px;line-height:1.6;outline:none" placeholder="How was your day? What did you learn? What went well? What can you improve tomorrow?"></textarea>
-    <div style="display:flex;gap:10px;margin-top:12px">
-      <div class="syswin-close" id="journalMicBtn" style="flex:0 0 110px; border-color:var(--accent); color:var(--accent);">🎤 VOICE</div>
-      <div class="syswin-close ok" id="saveDailyJournal" style="flex:1">SAVE TODAY</div>
-      <div class="syswin-close" id="clearDailyJournal" style="flex:1">CLEAR</div>
-    </div>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.5;margin-bottom:12px">Write about your day. Your journal is saved separately for each date.</div>
+    <textarea id="dailyJournalInput" style="width:100%;min-height:260px;resize:vertical;padding:14px;background:var(--panel-2);border:1px solid var(--border-bright);color:var(--text);font-family:Rajdhani,sans-serif;font-size:15px;line-height:1.6;outline:none" placeholder="How was your day? What did you learn? What went well? What can you improve tomorrow?"></textarea>
+    <div style="display:flex;gap:10px;margin-top:12px"><div class="syswin-close ok" id="saveDailyJournal" style="flex:1">SAVE TODAY</div><div class="syswin-close" id="clearDailyJournal" style="flex:1">CLEAR</div></div>
   </div>
   <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">JOURNAL <b>HISTORY</b></p><div id="dailyJournalHistory"></div></div>
 </div>
@@ -171,8 +165,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
         <div class="emptystate">Connecting to Guild network...</div>
       </div>
       <div class="chat-input-row">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Broadcast message or voice..." maxlength="250" autocomplete="off">
-        <div class="chat-mic-btn" id="chatMicBtn" title="Voice Input">🎤</div>
+        <input type="text" class="chat-input" id="chatInput" placeholder="Broadcast message to all hunters..." maxlength="250" autocomplete="off">
         <div class="chat-send" id="chatSendBtn">SEND</div>
       </div>
     </div>
@@ -226,14 +219,15 @@ const TEMPLATES=[
 {name:'Deep Work Block',icon:'🧠'},{name:'Sleep 7+ Hours',icon:'🌙'},{name:'Meditate / Focus',icon:'🧘'},
 {name:'Stretch / Mobility',icon:'🤸'},{name:'Cold Discipline',icon:'❄️'},{name:'Clean Eating',icon:'🥗'},{name:'Social / Outreach',icon:'🗣️'}];
 
+// 7 DAYS 7 MP4 VIDEOS (Sunday = 0 to Saturday = 6)
 const WEEKLY_VIDEOS = [
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",
-  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4"
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",    // 0: Sunday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",    // 1: Monday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",   // 2: Tuesday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4", // 3: Wednesday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",  // 4: Thursday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4",    // 5: Friday
+  "https://github.com/Harsuvarthan10/the-system/raw/refs/heads/main/Thor%5B1%5D.mp4"   // 6: Saturday
 ];
 
 let data=null,currentUser=null,tickHandle=null,registryCache=[],renamingId=null,editingJournalDate=null;
@@ -397,7 +391,7 @@ function renderLeaderboard(){
   lb.innerHTML = sorted.map((h, idx) => { let rObj = rankFor(h.level || 1); return `<div class="lb-row"><div style="font-family:'Orbitron',sans-serif; font-size:11px; color:var(--text-faint); width:18px; text-align:center;">#${idx+1}</div><div class="lb-info"><div class="lb-name">${escapeHtml(h.name)}</div><div class="lb-meta">XP: ${h.xp || 0} / 100</div></div><div class="lb-rank" style="color:${rObj.color}; border-color:${rObj.color}">${rObj.r}</div><div class="lb-lvl">LV ${h.level || 1}</div></div>`; }).join('');
 }
 
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;}[m]))}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function saveData(){ if(!currentUser||!data)return false; try{ localStorage.setItem(profileKey(currentUser),JSON.stringify(data)); updateRegistry(); if(db)db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e)); return true; }catch(e){ showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Storage full or unavailable.'}); return false; } }
 
 function loadProfile(name, password=""){
@@ -667,59 +661,7 @@ function renderDailyJournal(){
   el.querySelectorAll('[data-del-j]').forEach(btn => btn.onclick = () => deleteDailyJournal(btn.dataset.delJ));
 }
 
-/* SPEECH RECOGNITION / VOICE TYPING FOR JOURNAL */
-function initJournalSpeech(){
-  const micBtn = document.getElementById('journalMicBtn');
-  const textarea = document.getElementById('dailyJournalInput');
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRecognition){
-    if(micBtn) micBtn.style.display = 'none';
-    return;
-  }
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-
-  let isRecording = false;
-  micBtn.onclick = () => {
-    if(!isRecording){
-      try {
-        recognition.start();
-      } catch(e) {}
-    } else {
-      try {
-        recognition.stop();
-      } catch(e) {}
-    }
-  };
-
-  recognition.onstart = () => {
-    isRecording = true;
-    micBtn.classList.add('recording');
-    micBtn.textContent = '🔴 LISTENING';
-  };
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    const currentVal = textarea.value;
-    textarea.value = currentVal ? currentVal + ' ' + transcript : transcript;
-  };
-
-  recognition.onerror = () => {
-    isRecording = false;
-    micBtn.classList.remove('recording');
-    micBtn.textContent = '🎤 VOICE';
-  };
-
-  recognition.onend = () => {
-    isRecording = false;
-    micBtn.classList.remove('recording');
-    micBtn.textContent = '🎤 VOICE';
-  };
-}
-
-/* GUILD CHAT FUNCTIONS WITH VOICE MESSAGE SUPPORT */
+/* GUILD CHAT FUNCTIONS WITH CLEAN FORMATTING */
 function initChatListener(){
   if(!db) return;
   if(unsubChat) unsubChat();
@@ -744,7 +686,6 @@ function sendGuildMessage(){
     sender: currentUser,
     level: data.level || 1,
     text: text,
-    isVoice: false,
     timestamp: firebase.firestore.FieldValue.serverTimestamp()
   };
 
@@ -754,67 +695,6 @@ function sendGuildMessage(){
   }).catch(err => {
     alert("Failed to send message.");
   });
-}
-
-function sendVoiceMessage(transcript){
-  if(!transcript || !currentUser || !data) return;
-  if(!db) return;
-  const msgData = {
-    sender: currentUser,
-    level: data.level || 1,
-    text: transcript,
-    isVoice: true,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  };
-  db.collection("guild_chat").add(msgData).then(() => {
-    playSound('quest');
-  });
-}
-
-function initChatVoice(){
-  const micBtn = document.getElementById('chatMicBtn');
-  const input = document.getElementById('chatInput');
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SpeechRecognition){
-    if(micBtn) micBtn.style.display = 'none';
-    return;
-  }
-  const recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-
-  let isRecording = false;
-  micBtn.onclick = () => {
-    if(!isRecording){
-      try { recognition.start(); } catch(e){}
-    } else {
-      try { recognition.stop(); } catch(e){}
-    }
-  };
-
-  recognition.onstart = () => {
-    isRecording = true;
-    micBtn.classList.add('recording');
-    input.placeholder = "Listening voice message...";
-  };
-
-  recognition.onresult = (event) => {
-    const transcript = event.results[0][0].transcript;
-    sendVoiceMessage(transcript);
-  };
-
-  recognition.onerror = () => {
-    isRecording = false;
-    micBtn.classList.remove('recording');
-    input.placeholder = "Broadcast message to all hunters...";
-  };
-
-  recognition.onend = () => {
-    isRecording = false;
-    micBtn.classList.remove('recording');
-    input.placeholder = "Broadcast message to all hunters...";
-  };
 }
 
 function editGuildMessage(id, oldText){
@@ -846,13 +726,12 @@ function renderChatMessages(){
   container.innerHTML = chatMessagesCache.map(m => {
     let rObj = rankFor(m.level || 1);
     let isOwner = (m.sender === currentUser);
-    let contentDisplay = m.isVoice ? `<div style="display:flex; align-items:center; gap:6px;"><span style="font-size:16px;">🎙️</span> <span style="font-style:italic;">Voice: "${escapeHtml(m.text)}"</span></div>` : escapeHtml(m.text);
     return `<div class="chat-msg" data-msgid="${m.id}">
       <div class="chat-msg-header">
         <span class="chat-msg-user">${escapeHtml(m.sender)}</span> 
         <span style="color:${rObj.color}; font-size:10px;">[${rObj.r} LV ${m.level || 1}]</span>
       </div>
-      <div class="chat-msg-text">${contentDisplay}</div>
+      <div class="chat-msg-text">${escapeHtml(m.text)}</div>
       ${isOwner ? `<div class="chat-actions">
         <button class="chat-act-btn" onclick="editGuildMessage('${m.id}', \`${escapeHtml(m.text).replace(/`/g, '\\`')}\`)">EDIT</button> 
         <span>·</span> 
@@ -884,7 +763,7 @@ function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
-// CREDENTIALS CHANGE FUNCTIONS
+// CREDENTIALS CHANGE FUNCTIONS (UPDATED TO PREVENT NEW USER CREATION)
 function openCredsModal(){
   if(!data) return;
   document.getElementById('newUsernameInput').value = data.playerName;
@@ -902,14 +781,17 @@ function saveCredsModal(){
   const oldKey = keyName(currentUser);
   const newKey = keyName(newName);
 
+  // Remove old local profile and cloud record if username changed
   if(oldKey !== newKey){
     localStorage.removeItem(profileKey(currentUser));
     if(db) db.collection("hunters").doc(oldKey).delete().catch(e=>console.log(e));
   }
 
+  // Update current user data directly preserving level, xp and quests
   data.playerName = newName;
   data.password = newPass;
   
+  // Remove old key from registry cache and update with new name
   registryCache = registryCache.filter(h => h.key !== oldKey);
   currentUser = newName;
   localStorage.setItem(CURRENT_USER_KEY, currentUser);
@@ -949,8 +831,6 @@ document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
 });
 
 boot();
-initJournalSpeech();
-initChatVoice();
 </script>
 </body>
 </html>
