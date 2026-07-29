@@ -67,7 +67,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .lb-lvl{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);font-weight:bold;text-align:right;}
 .tabs{display:flex;gap:4px;padding:12px 16px}.tab{flex:1;text-align:center;padding:10px 2px;font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:1px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);cursor:pointer;user-select:none}.tab.active{color:var(--accent);border-color:var(--border-bright);background:linear-gradient(180deg,rgba(74,168,255,.12),rgba(74,168,255,.02));box-shadow:0 0 16px rgba(74,168,255,.15) inset}.content{flex:1;padding:6px 16px 40px}.panel{padding:16px;margin-bottom:14px;position:relative}.panel-title{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin:0 0 12px}.panel-title b{color:var(--accent)}
 
-/* 3D SOLO LEVELING CHARACTER AVATAR (CSS HOLOGRAM EFFECT) */
+/* 3D SOLO LEVELING CHARACTER AVATAR */
 .status-char-container {
   display: flex;
   flex-direction: column;
@@ -94,7 +94,6 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
   0% { transform: scale(1); box-shadow: 0 0 15px rgba(74,168,255,0.4), inset 0 0 10px rgba(74,168,255,0.3); }
   100% { transform: scale(1.05); box-shadow: 0 0 35px rgba(74,168,255,0.8), inset 0 0 20px rgba(74,168,255,0.7); }
 }
-/* Hologram scanline effect */
 .avatar-3d-sphere::after {
   content: '';
   position: absolute;
@@ -103,7 +102,6 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
   background-size: 100% 4px;
   pointer-events: none;
 }
-/* 3D Solo Leveling Silhouette SVG Animation */
 .solo-silhouette {
   width: 65px;
   height: 65px;
@@ -847,7 +845,7 @@ function renderQuests(){
 }
 
 function renderLog(){document.getElementById('logList').innerHTML=data.log.length?data.log.map(l=>`<div class="logitem ${l.type==='penalty'?'penalty':l.type==='levelup'?'levelup':''}"><div class="t">${escapeHtml(l.text)}</div><div class="d">${l.date}</div></div>`).join(''):'<div class="emptystate">No activity yet.</div>'}
-function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.remove('gold','danger');if(o.tone)w.classList.add(o.tone);document.getElementById('sysTag').textContent=o.tag;document.getElementById('sysTitle').textContent=o.title;document.getElementById('sysBody').innerHTML=o.body;document.getElementById('sysActions').innerHTML='<div class="syswin-close" id="sysClose">CONFIRM</div>';document.getElementById('sysClose'].onclick=closeSysWindow;document.getElementById('sysOverlay').classList.add('show')}
+function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.remove('gold','danger');if(o.tone)w.classList.add(o.tone);document.getElementById('sysTag').textContent=o.tag;document.getElementById('sysTitle').textContent=o.title;document.getElementById('sysBody').innerHTML=o.body;document.getElementById('sysActions').innerHTML='<div class="syswin-close" id="sysClose">CONFIRM</div>';document.getElementById('sysClose').onclick=closeSysWindow;document.getElementById('sysOverlay').classList.add('show')}
 
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
