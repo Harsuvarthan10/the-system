@@ -148,7 +148,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">QUEST <b>PROGRESS</b></p><div class="deadlinerow"><div class="deadline-label">Deadline<b>10:00 PM IST Tonight</b></div><div class="deadline-clock" id="deadlineClock">--:--:--</div></div><div class="progress-count" id="progressCount">0 / 0 quests cleared today</div><div id="statusQuestList"></div></div>
 </div>
 <div class="tabpanel" id="tab-quests" style="display:none"><div class="qhead"><p class="panel-title" style="margin:0">DAILY <b>QUESTS</b></p><div class="addbtn" id="openAdd">+ ADD</div></div><div id="questList"></div></div>
-<div class="tabpanel" id="tab-log" style="display:none"><p class="panel-title">ACTIVITY <b>LOG & BACKUP</b></p><div class="logactions"><div class="logbtn switch" id="switchHunterBtn">SWITCH HUNTER</div><div class="logbtn backup" id="exportDataBtn">EXPORT BACKUP</div><div class="logbtn backup" id="importDataBtn">RESTORE DATA</div><div class="logbtn reset" id="resetDataBtn">RESET TODAY</div></div><input type="file" id="importFileInput" style="display:none" accept=".json"><div id="logList"></div></div>
+<div class="tabpanel" id="tab-log" style="display:none"><p class="panel-title">ACTIVITY <b>LOG & SETTINGS</b></p><div class="logactions"><div class="logbtn switch" id="switchHunterBtn">SWITCH HUNTER</div><div class="logbtn switch" id="editCredsBtn" style="color:var(--gold); border-color:var(--gold); background:rgba(245,196,81,.06);">CHANGE CREDENTIALS</div><div class="logbtn backup" id="exportDataBtn">EXPORT BACKUP</div><div class="logbtn backup" id="importDataBtn">RESTORE DATA</div><div class="logbtn reset" id="resetDataBtn">RESET TODAY</div></div><input type="file" id="importFileInput" style="display:none" accept=".json"><div id="logList"></div></div>
 <div class="tabpanel" id="tab-daily" style="display:none">
   <div class="panel hud-frame">
     <div class="c3"></div><div class="c4"></div>
@@ -178,6 +178,23 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 <div class="overlay" id="sysOverlay"><div class="syswin hud-frame" id="sysWin"><div class="c3"></div><div class="c4"></div><div class="syswin-tag" id="sysTag">[ SYSTEM ]</div><div class="syswin-title" id="sysTitle">QUEST COMPLETE</div><div class="syswin-body" id="sysBody"></div><div id="sysActions"><div class="syswin-close" id="sysClose">CONFIRM</div></div></div></div>
 <div class="overlay" id="addOverlay"><div class="syswin hud-frame" style="max-width:380px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">NEW QUEST</div><div class="modal-scroll" id="templateList"></div><div class="syswin-close" id="addClose">CANCEL</div></div></div>
 <div class="overlay" id="renameOverlay"><div class="syswin hud-frame" style="max-width:360px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">RENAME QUEST</div><input type="text" class="login-input" id="renameInput" maxlength="30"><div style="display:flex;gap:10px"><div class="syswin-close" id="renameCancel" style="flex:1">CANCEL</div><div class="syswin-close ok" id="renameSave" style="flex:1">SAVE</div></div></div></div>
+
+<!-- CREDENTIALS EDIT OVERLAY -->
+<div class="overlay" id="credsOverlay">
+  <div class="syswin hud-frame" style="max-width:360px">
+    <div class="c3"></div><div class="c4"></div>
+    <div class="syswin-tag">[ SECURITY ]</div>
+    <div class="syswin-title" style="font-size:16px">CHANGE CREDENTIALS</div>
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:10px; text-align:left;">New Username:</div>
+    <input type="text" class="login-input" id="newUsernameInput" maxlength="20" autocomplete="off">
+    <div style="font-size:12px; color:var(--text-dim); margin-bottom:10px; text-align:left;">New Password:</div>
+    <input type="password" class="login-input" id="newPasswordInput" maxlength="20" autocomplete="off">
+    <div style="display:flex;gap:10px; margin-top:6px;">
+      <div class="syswin-close" id="credsCancel" style="flex:1">CANCEL</div>
+      <div class="syswin-close ok" id="credsSave" style="flex:1">UPDATE</div>
+    </div>
+  </div>
+</div>
 
 <script>
 // FIREBASE CONFIGURATION
@@ -582,7 +599,6 @@ function animateXPOnStatusTab(){
       document.body.classList.add('shake-active');
       setTimeout(() => document.body.classList.remove('shake-active'), 600);
 
-      // Level up popup message first, then 2 seconds later show video popup
       const newRankObj = rankFor(uiLevel);
       showSysWindow({ tag:'[ LEVEL UP ]', title:`LEVEL ${uiLevel}`, tone:'gold', body:`Rank: <b>${newRankObj.r}</b><br>Congratulations! Your power has increased.` });
       
@@ -590,7 +606,7 @@ function animateXPOnStatusTab(){
         if(lvlWrap) lvlWrap.classList.remove('lvl-pop'); 
         showVideoPopup();
         isAnimatingXP = false;
-      }, 2000); // exactly 2 seconds delay
+      }, 2000);
     }, 200);
     return;
   }
@@ -751,12 +767,52 @@ function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
+// CREDENTIALS CHANGE FUNCTIONS
+function openCredsModal(){
+  if(!data) return;
+  document.getElementById('newUsernameInput').value = data.playerName;
+  document.getElementById('newPasswordInput').value = data.password || "";
+  document.getElementById('credsOverlay').classList.add('show');
+  document.getElementById('newUsernameInput').focus();
+}
+
+function saveCredsModal(){
+  const newName = document.getElementById('newUsernameInput').value.trim();
+  const newPass = document.getElementById('newPasswordInput').value.trim();
+  if(!newName){ alert("Username cannot be empty!"); return; }
+  if(!newPass){ alert("Password cannot be empty!"); return; }
+
+  const oldKey = keyName(currentUser);
+  const newKey = keyName(newName);
+
+  // If username changed, delete old storage profile key and create new
+  if(oldKey !== newKey){
+    localStorage.removeItem(profileKey(currentUser));
+    if(db) db.collection("hunters").doc(oldKey).delete().catch(e=>console.log(e));
+  }
+
+  data.playerName = newName;
+  data.password = newPass;
+  currentUser = newName;
+  localStorage.setItem(CURRENT_USER_KEY, currentUser);
+
+  saveData();
+  document.getElementById('credsOverlay').classList.remove('show');
+  playSound('quest');
+  showSysWindow({ tag:'[ SYSTEM ]', title:'CREDENTIALS UPDATED', tone:'gold', body:`Username & Password successfully updated to <b>${escapeHtml(newName)}</b>!` });
+  render();
+}
+
 document.getElementById('loginBtn').onclick=()=>loginWithName(document.getElementById('loginInput').value, document.getElementById('passwordInput').value);
 document.getElementById('loginInput').onkeydown=e=>{if(e.key==='Enter')document.getElementById('passwordInput').focus()};
 document.getElementById('passwordInput').onkeydown=e=>{if(e.key==='Enter')loginWithName(document.getElementById('loginInput').value, document.getElementById('passwordInput').value)};
 
 document.getElementById('openAdd').onclick=openAddModal;document.getElementById('addClose').onclick=closeAddModal;document.getElementById('renameCancel').onclick=closeRename;document.getElementById('renameSave').onclick=saveRename;document.getElementById('renameInput').onkeydown=e=>{if(e.key==='Enter')saveRename()};
 document.getElementById('switchHunterBtn').onclick=logoutUser;
+document.getElementById('editCredsBtn').onclick = openCredsModal;
+document.getElementById('credsCancel').onclick = () => document.getElementById('credsOverlay').classList.remove('show');
+document.getElementById('credsSave').onclick = saveCredsModal;
+
 document.getElementById('saveDailyJournal').addEventListener('click', saveDailyJournal);
 document.getElementById('clearDailyJournal').addEventListener('click', clearDailyJournal);
 document.getElementById('exportDataBtn').onclick = exportBackupData;
