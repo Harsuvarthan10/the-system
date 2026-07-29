@@ -5,17 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
 <title>THE SYSTEM</title>
 
-<!-- MOBILE HOME SCREEN ICON TAGS (PWA Ready) -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="THE SYSTEM">
 <meta name="theme-color" content="#05070c">
 
-<!-- Solo Leveling Style Blue-H Glow Icon -->
 <link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'><rect width='100%' height='100%' fill='%2305070c'/><rect x='10' y='10' width='172' height='172' fill='%230f1526' stroke='%234aa8ff' stroke-width='4' rx='20'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%234aa8ff' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/><path d='M60 50 V140 M132 50 V140 M60 95 H132' fill='none' stroke='%23ffffff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/></svg>">
 
-<!-- FIREBASE SDK INCLUSION -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -66,67 +63,6 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .lb-rank{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:bold;padding:3px 7px;border:1px solid var(--accent);background:rgba(74,168,255,.06);}
 .lb-lvl{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--gold);font-weight:bold;text-align:right;}
 .tabs{display:flex;gap:4px;padding:12px 16px}.tab{flex:1;text-align:center;padding:10px 2px;font-family:Orbitron,sans-serif;font-size:9.5px;letter-spacing:1px;color:var(--text-dim);background:var(--panel);border:1px solid var(--border);cursor:pointer;user-select:none}.tab.active{color:var(--accent);border-color:var(--border-bright);background:linear-gradient(180deg,rgba(74,168,255,.12),rgba(74,168,255,.02));box-shadow:0 0 16px rgba(74,168,255,.15) inset}.content{flex:1;padding:6px 16px 40px}.panel{padding:16px;margin-bottom:14px;position:relative}.panel-title{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);margin:0 0 12px}.panel-title b{color:var(--accent)}
-
-/* 3D SOLO LEVELING CHARACTER AVATAR */
-.status-char-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 12px 0;
-  position: relative;
-}
-.avatar-3d-sphere {
-  width: 95px;
-  height: 95px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,168,255,0.3) 0%, rgba(10,14,26,0.95) 75%);
-  border: 2px solid var(--accent);
-  box-shadow: 0 0 25px rgba(74,168,255,0.5), inset 0 0 15px rgba(74,168,255,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  animation: spherePulse 3s infinite alternate ease-in-out;
-}
-@keyframes spherePulse {
-  0% { transform: scale(1); box-shadow: 0 0 15px rgba(74,168,255,0.4), inset 0 0 10px rgba(74,168,255,0.3); }
-  100% { transform: scale(1.05); box-shadow: 0 0 35px rgba(74,168,255,0.8), inset 0 0 20px rgba(74,168,255,0.7); }
-}
-.avatar-3d-sphere::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(74, 168, 255, 0.15) 50%);
-  background-size: 100% 4px;
-  pointer-events: none;
-}
-.solo-silhouette {
-  width: 65px;
-  height: 65px;
-  fill: var(--accent);
-  filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 12px var(--accent));
-  animation: floatIcon 2.5s infinite alternate ease-in-out;
-}
-@keyframes floatIcon {
-  0% { transform: translateY(2px) scale(0.98); }
-  100% { transform: translateY(-3px) scale(1.02); }
-}
-.anime-avatar-badge {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 9.5px;
-  letter-spacing: 2.5px;
-  color: var(--gold);
-  background: rgba(5,7,12,0.85);
-  border: 1px solid var(--gold);
-  padding: 3px 10px;
-  border-radius: 12px;
-  margin-top: -9px;
-  z-index: 2;
-  box-shadow: 0 0 10px rgba(245,196,81,0.5);
-}
-
 .levelrow{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}.levelrow .lvl{font-family:Orbitron,sans-serif;font-size:32px;font-weight:900;color:var(--text);text-shadow:0 0 20px rgba(74,168,255,.35);transition:transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.4s ease, text-shadow 0.4s ease;}.levelrow .lvl.lvl-pop{color:var(--gold);text-shadow:0 0 40px var(--gold), 0 0 15px #fff;transform:scale(1.35);}.levelrow .lvl span:first-child{font-size:13px;color:var(--text-dim);letter-spacing:2px;margin-right:6px;font-family:Rajdhani,sans-serif;font-weight:600}.levelrow .name{font-size:15px;color:var(--text-dim);font-weight:600}.xpbar-wrap{margin-top:6px}.xpbar-label{display:flex;justify-content:space-between;font-family:JetBrains Mono,monospace;font-size:11px;color:var(--text-dim);margin-bottom:5px}.xpbar{height:10px;background:var(--panel-2);border:1px solid var(--border);overflow:hidden}.xpbar-fill{height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));box-shadow:0 0 12px rgba(74,168,255,.6);transition:width .05s linear}
 .deadlinerow{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--border)}.deadline-label{font-size:12px;color:var(--text-dim)}.deadline-label b{color:var(--text);display:block;font-size:13px;margin-top:2px}.deadline-clock{font-family:JetBrains Mono,monospace;font-size:18px;font-weight:600;color:var(--accent);text-shadow:0 0 10px rgba(74,168,255,.4);text-align:right}.deadline-clock.overdue{color:var(--danger)}.progress-count{font-family:JetBrains Mono,monospace;font-size:13px;color:var(--text-dim);margin-bottom:12px}.progress-count b{color:var(--success)}.tinyquest{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}.tinyquest:last-child{border-bottom:none}.tinyquest .icon{font-size:16px;width:22px;text-align:center}.tinyquest .info{flex:1;min-width:0}.tinyquest .tn{font-size:13.5px;color:var(--text);font-weight:600}.tinyquest.done .tn{color:var(--text-dim)}.tinyquest .tmeta{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:2px}.tinyquest .tmeta b{color:var(--accent)}.tinyquest .tag-done{font-size:11px;color:var(--success);font-family:JetBrains Mono,monospace;flex-shrink:0}
 .qhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.addbtn{font-family:Orbitron,sans-serif;font-size:11px;letter-spacing:1px;color:var(--accent);border:1px solid var(--border-bright);padding:7px 12px;cursor:pointer;background:rgba(74,168,255,.06)}.quest{display:flex;align-items:center;gap:10px;padding:12px;margin-bottom:9px;background:var(--panel-2);border:1px solid var(--border);border-left:3px solid var(--accent-dim);position:relative}.quest.done{border-left-color:var(--success);opacity:.7}.quest .icon{font-size:20px;width:26px;text-align:center}.quest .info{flex:1;min-width:0}.quest .qname{font-size:15px;font-weight:600;color:var(--text)}.quest.done .qname{text-decoration:line-through;color:var(--text-dim)}.quest .qmeta,.quest .qdays{font-family:JetBrains Mono,monospace;font-size:10.5px;color:var(--text-faint);margin-top:3px}.quest .qmeta b{color:var(--accent);font-weight:600}.quest .streak{font-size:10.5px;color:var(--gold);margin-left:6px}.check{width:24px;height:24px;border:2px solid var(--border-bright);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:transparent;font-weight:700}.quest.done .check{background:var(--success);border-color:var(--success);color:#05070c}.quest.locked .check{cursor:not-allowed;background:var(--panel);border-color:var(--border);color:var(--text-faint)}.qedit,.qremove{width:24px;height:24px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;border:1px solid var(--border)}.qedit{color:var(--accent);background:rgba(74,168,255,.06)}.qremove{color:var(--danger);background:rgba(255,84,104,.06)}.emptystate{text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13px}
@@ -199,29 +135,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 </div>
 <div class="content">
 <div class="tabpanel" id="tab-status">
-<div class="panel hud-frame">
-  <div class="c3"></div><div class="c4"></div>
-  <div class="levelrow">
-    <div class="lvl" id="lvlWrap"><span>LV</span><span id="lvlNum">1</span></div>
-    <div class="name" id="playerName">Hunter</div>
-  </div>
-  
-  <!-- 3D SOLO LEVELING CHARACTER HOLOGRAM AVATAR -->
-  <div class="status-char-container">
-    <div class="avatar-3d-sphere">
-      <svg class="solo-silhouette" viewBox="0 0 24 24">
-        <path d="M12 2C9.24 2 7 4.24 7 7c0 1.58.74 2.99 1.89 3.91C6.26 12.35 4 15.19 4 18.5V20h16v-1.5c0-3.31-2.26-6.15-4.89-7.59C16.26 9.99 17 8.58 17 7c0-2.76-2.24-5-5-5zm0 2c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 8c3.31 0 6 1.79 6 4v1H6v-1c0-2.21 2.69-4 6-4z"/>
-      </svg>
-    </div>
-    <div class="anime-avatar-badge">[ SHADOW MONARCH ]</div>
-  </div>
-
-  <div class="xpbar-wrap">
-    <div class="xpbar-label"><span>XP</span><span id="xpLabel">0 / 100</span></div>
-    <div class="xpbar"><div class="xpbar-fill" id="xpFill" style="width:0%"></div></div>
-  </div>
-</div>
-
+<div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><div class="levelrow"><div class="lvl" id="lvlWrap"><span>LV</span><span id="lvlNum">1</span></div><div class="name" id="playerName">Hunter</div></div><div class="xpbar-wrap"><div class="xpbar-label"><span>XP</span><span id="xpLabel">0 / 100</span></div><div class="xpbar"><div class="xpbar-fill" id="xpFill" style="width:0%"></div></div></div></div>
 <div class="panel hud-frame">
   <div class="c3"></div><div class="c4"></div>
   <p class="panel-title">ALL HUNTERS <b>LEADERBOARD</b></p>
@@ -262,7 +176,6 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 <div class="overlay" id="addOverlay"><div class="syswin hud-frame" style="max-width:380px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">NEW QUEST</div><div class="modal-scroll" id="templateList"></div><div class="syswin-close" id="addClose">CANCEL</div></div></div>
 <div class="overlay" id="renameOverlay"><div class="syswin hud-frame" style="max-width:360px"><div class="c3"></div><div class="c4"></div><div class="syswin-tag">[ SYSTEM ]</div><div class="syswin-title" style="font-size:17px">RENAME QUEST</div><input type="text" class="login-input" id="renameInput" maxlength="30"><div style="display:flex;gap:10px"><div class="syswin-close" id="renameCancel" style="flex:1">CANCEL</div><div class="syswin-close ok" id="renameSave" style="flex:1">SAVE</div></div></div></div>
 
-<!-- CREDENTIALS EDIT OVERLAY -->
 <div class="overlay" id="credsOverlay">
   <div class="syswin hud-frame" style="max-width:360px">
     <div class="c3"></div><div class="c4"></div>
@@ -850,7 +763,7 @@ function showSysWindow(o){const w=document.getElementById('sysWin');w.classList.
 function openAddModal(){document.getElementById('templateList').innerHTML=TEMPLATES.map((t,i)=>`<div class="template" data-i="${i}"><div class="icon">${t.icon}</div><div class="tn">${t.name}</div><div class="ts">+XP</div></div>`).join('');document.querySelectorAll('.template').forEach(x=>x.onclick=()=>addQuest(TEMPLATES[x.dataset.i]));document.getElementById('addOverlay').classList.add('show')}
 function closeAddModal(){document.getElementById('addOverlay').classList.remove('show')}
 
-// CREDENTIALS CHANGE FUNCTIONS
+// CREDENTIALS CHANGE FUNCTIONS (UPDATED TO PREVENT NEW USER CREATION)
 function openCredsModal(){
   if(!data) return;
   document.getElementById('newUsernameInput').value = data.playerName;
@@ -868,14 +781,17 @@ function saveCredsModal(){
   const oldKey = keyName(currentUser);
   const newKey = keyName(newName);
 
+  // Remove old local profile and cloud record if username changed
   if(oldKey !== newKey){
     localStorage.removeItem(profileKey(currentUser));
     if(db) db.collection("hunters").doc(oldKey).delete().catch(e=>console.log(e));
   }
 
+  // Update current user data directly preserving level, xp and quests
   data.playerName = newName;
   data.password = newPass;
   
+  // Remove old key from registry cache and update with new name
   registryCache = registryCache.filter(h => h.key !== oldKey);
   currentUser = newName;
   localStorage.setItem(CURRENT_USER_KEY, currentUser);
