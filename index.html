@@ -395,23 +395,29 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':
 function saveData(){ if(!currentUser||!data)return false; try{ localStorage.setItem(profileKey(currentUser),JSON.stringify(data)); updateRegistry(); if(db)db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e)); return true; }catch(e){ showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Storage full or unavailable.'}); return false; } }
 
 function loadProfile(name, password=""){
-  let raw=localStorage.getItem(profileKey(name)); if(raw)data=safeParse(raw,null);
-  if(!data)data=defaultData(name, password);
+  let raw=localStorage.getItem(profileKey(name)); 
+  if(raw) data=safeParse(raw,null);
+  if(!data) data=defaultData(name, password);
   if(!data.password && password) data.password = password;
+  
   data.playerName=name; data.xpToNext=100; data.lastLeveledDate=data.lastLeveledDate||null;
   data.quests=(data.quests||[]).map(q=>({...q,id:q.id||cid(),xp:q.xp||0,icon:q.icon||'🎯',streak:q.streak||0,totalDays:q.totalDays||0,completedToday:!!q.completedToday,startDate:q.startDate||todayStr()}));
   data.lastActiveDate=data.lastActiveDate||todayStr(); data.log=data.log||[]; data.history=data.history||{}; ensureJournal();
   data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null; data.morningAlertShownDate=data.morningAlertShownDate||null;
   uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100;
   redistributeXP(); applyDailyReset(); saveData();
-  
+
   if(db){
+    // Immediately fetch latest cloud data upon login so other devices' modifications are loaded instantly
     db.collection("hunters").doc(keyName(name)).get().then(doc => {
       if(doc.exists){
         let cloudData = doc.data();
         if(cloudData){
-          data = cloudData; uiXP = data.xp; uiLevel = data.level;
-          localStorage.setItem(profileKey(name), JSON.stringify(data)); render();
+          data = cloudData; 
+          uiXP = data.xp; 
+          uiLevel = data.level;
+          localStorage.setItem(profileKey(name), JSON.stringify(data)); 
+          render();
         }
       }
     }).catch(e => console.log(e));
