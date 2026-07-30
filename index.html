@@ -542,7 +542,25 @@ function completeQuest(id, evt){
 }
 
 function removeQuest(id){if(!confirm('Remove this quest?'))return;data.quests=data.quests.filter(q=>q.id!==id);redistributeXP();saveData();render()}
-function addQuest(t){data.quests.push({id:cid(),name:t.name,xp:0,icon:t.icon,streak:0,totalDays:0,completedToday:false,startDate:todayStr()});redistributeXP();saveData();render();closeAddModal()}
+
+function addQuest(t){
+  let startingDate = (data.quests && data.quests.length > 0) ? data.quests[0].startDate : todayStr();
+  data.quests.push({
+    id: cid(),
+    name: t.name,
+    xp: 0,
+    icon: t.icon,
+    streak: 0,
+    totalDays: 0,
+    completedToday: false,
+    startDate: startingDate
+  });
+  redistributeXP();
+  saveData();
+  render();
+  closeAddModal();
+}
+
 function openRename(id){const q=data.quests.find(x=>x.id===id);if(!q)return;renamingId=id;document.getElementById('renameInput').value=q.name;document.getElementById('renameOverlay').classList.add('show');document.getElementById('renameInput').focus()}
 function saveRename(){const v=document.getElementById('renameInput').value.trim();if(v&&renamingId){const q=data.quests.find(x=>x.id===renamingId);if(q){q.name=v;saveData();render()}}closeRename()}
 function closeRename(){document.getElementById('renameOverlay').classList.remove('show');renamingId=null}
