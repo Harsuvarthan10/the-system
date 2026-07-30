@@ -93,7 +93,7 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 </head>
 <body>
 
-<div class="loginwrap" id="loginScreen">
+<div class="loginwrap" id="loginScreen" style="display:none">
   <div class="loginbox hud-frame">
     <div class="c3"></div><div class="c4"></div>
     <svg width="48" height="48" viewBox="0 0 100 100" fill="none" style="margin-bottom:10px;filter:drop-shadow(0 0 8px rgba(74,168,255,0.6));">
@@ -446,7 +446,17 @@ function setupProfileData(name, password){
   }
 }
 
-function boot(){loadRegistry();const u=localStorage.getItem(CURRENT_USER_KEY);if(u){currentUser=u;loadProfile(u);}else showLogin()}
+function boot(){
+  loadRegistry();
+  const u = localStorage.getItem(CURRENT_USER_KEY);
+  if(u){
+    currentUser = u;
+    loadProfile(u);
+  } else {
+    showLogin();
+  }
+}
+
 function showLogin(h=''){if(tickHandle){clearInterval(tickHandle);tickHandle=null}document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('loginHint').textContent=h;document.getElementById('loginInput').value='';document.getElementById('passwordInput').value='';renderHunterList()}
 function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';requestNotificationPermission();render();if(tickHandle)clearInterval(tickHandle);tickHandle=setInterval(tick,1000);initChatListener();}
 
