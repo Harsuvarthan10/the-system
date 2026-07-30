@@ -395,33 +395,44 @@ function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':
 function saveData(){ if(!currentUser||!data)return false; try{ localStorage.setItem(profileKey(currentUser),JSON.stringify(data)); updateRegistry(); if(db)db.collection("hunters").doc(keyName(currentUser)).set(data).catch(e=>console.log(e)); return true; }catch(e){ showSysWindow({tag:'[ SYSTEM ]',title:'SAVE FAILED',tone:'danger',body:'Storage full or unavailable.'}); return false; } }
 
 function loadProfile(name, password=""){
-  let raw=localStorage.getItem(profileKey(name)); 
-  if(raw) data=safeParse(raw,null);
-  if(!data) data=defaultData(name, password);
+  let k = keyName(name);
+  if(db){
+    db.collection("hunters").doc(k).get().then(doc => {
+      if(doc.exists){
+        data = doc.data();
+      } else {
+        let raw = localStorage.getItem(profileKey(name)); 
+        if(raw) data = safeParse(raw, null);
+        if(!data) data = defaultData(name, password);
+      }
+      setupProfileData(name, password);
+    }).catch(e => {
+      let raw = localStorage.getItem(profileKey(name)); 
+      if(raw) data = safeParse(raw, null);
+      if(!data) data = defaultData(name, password);
+      setupProfileData(name, password);
+    });
+  } else {
+    let raw = localStorage.getItem(profileKey(name)); 
+    if(raw) data = safeParse(raw, null);
+    if(!data) data = defaultData(name, password);
+    setupProfileData(name, password);
+  }
+}
+
+function setupProfileData(name, password){
   if(!data.password && password) data.password = password;
-  
   data.playerName=name; data.xpToNext=100; data.lastLeveledDate=data.lastLeveledDate||null;
   data.quests=(data.quests||[]).map(q=>({...q,id:q.id||cid(),xp:q.xp||0,icon:q.icon||'🎯',streak:q.streak||0,totalDays:q.totalDays||0,completedToday:!!q.completedToday,startDate:q.startDate||todayStr()}));
   data.lastActiveDate=data.lastActiveDate||todayStr(); data.log=data.log||[]; data.history=data.history||{}; ensureJournal();
   data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null; data.morningAlertShownDate=data.morningAlertShownDate||null;
   uiXP = data.xp; uiLevel = data.level; uiMaxXP = 100;
-  redistributeXP(); applyDailyReset(); saveData();
+  redistributeXP(); applyDailyReset(); 
+  localStorage.setItem(profileKey(name), JSON.stringify(data));
+  updateRegistry();
+  showApp();
 
   if(db){
-    // Immediately fetch latest cloud data upon login so other devices' modifications are loaded instantly
-    db.collection("hunters").doc(keyName(name)).get().then(doc => {
-      if(doc.exists){
-        let cloudData = doc.data();
-        if(cloudData){
-          data = cloudData; 
-          uiXP = data.xp; 
-          uiLevel = data.level;
-          localStorage.setItem(profileKey(name), JSON.stringify(data)); 
-          render();
-        }
-      }
-    }).catch(e => console.log(e));
-
     if(unsubHunter) unsubHunter();
     unsubHunter = db.collection("hunters").doc(keyName(name)).onSnapshot(doc => {
       if(doc.exists){
@@ -435,7 +446,7 @@ function loadProfile(name, password=""){
   }
 }
 
-function boot(){loadRegistry();const u=localStorage.getItem(CURRENT_USER_KEY);if(u){currentUser=u;loadProfile(u);showApp()}else showLogin()}
+function boot(){loadRegistry();const u=localStorage.getItem(CURRENT_USER_KEY);if(u){currentUser=u;loadProfile(u);}else showLogin()}
 function showLogin(h=''){if(tickHandle){clearInterval(tickHandle);tickHandle=null}document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';document.getElementById('loginHint').textContent=h;document.getElementById('loginInput').value='';document.getElementById('passwordInput').value='';renderHunterList()}
 function showApp(){document.getElementById('loginScreen').style.display='none';document.getElementById('app').style.display='flex';requestNotificationPermission();render();if(tickHandle)clearInterval(tickHandle);tickHandle=setInterval(tick,1000);initChatListener();}
 
@@ -447,7 +458,7 @@ function loginWithName(n, pass){
   if(existingHunter && existingHunter.password && existingHunter.password !== pass){ playSound('alert'); document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n; return; }
   let raw = localStorage.getItem(profileKey(n));
   if(raw){ let localD = safeParse(raw, null); if(localD && localD.password && localD.password !== pass){ playSound('alert'); document.getElementById('loginHint').textContent='Incorrect password for Hunter ' + n; return; } }
-  currentUser=n; localStorage.setItem(CURRENT_USER_KEY,n); loadProfile(n, pass); showApp();
+  currentUser=n; localStorage.setItem(CURRENT_USER_KEY,n); loadProfile(n, pass);
 }
 
 function logoutUser(){ if(unsubHunter) { unsubHunter(); unsubHunter = null; } if(unsubChat) { unsubChat(); unsubChat = null; } localStorage.removeItem(CURRENT_USER_KEY); currentUser=null; data=null; showLogin('Switched hunter. Enter name and password.'); }
