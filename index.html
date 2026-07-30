@@ -250,19 +250,21 @@ function spawnParticles(x, y) {
   }
 }
 
-/* ANIME GIRL VOICE WELCOME SPEECH */
-function playAnimeWelcomeVoice(name){
+/* TAMIL HUMAN GIRL VOICE WELCOME SPEECH */
+function playTamilWelcomeVoice(name){
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel(); // Stop any ongoing speech
-    let utterance = new SpeechSynthesisUtterance(`Welcome back, Hunter ${name}! Let's clear our daily quests today!`);
-    utterance.rate = 1.15; // Slightly faster for energetic anime girl vibe
-    utterance.pitch = 1.6; // High pitch for cute anime girl voice tone
+    let textToSpeak = `Welcome Hunter ${name}. intha naalil ungaloda quest-ai nalla muraiyil finish seyyungal!`;
+    let utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = 'ta-IN'; // Tamil language
+    utterance.rate = 1.0;     // Normal natural human speed
+    utterance.pitch = 1.1;    // Gentle feminine pitch tone
     utterance.volume = 1.0;
 
-    // Try to pick a female/cute voice if available in the browser
+    // Try to pick a Tamil female voice if available in the browser/device
     let voices = window.speechSynthesis.getVoices();
-    let femaleVoice = voices.find(v => v.name.includes('Google UK English Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Zira') || v.lang.includes('en'));
-    if(femaleVoice) utterance.voice = femaleVoice;
+    let tamilVoice = voices.find(v => v.lang.includes('ta') || v.lang.includes('ta-IN'));
+    if(tamilVoice) utterance.voice = tamilVoice;
 
     window.speechSynthesis.speak(utterance);
   }
@@ -450,8 +452,8 @@ function setupProfileData(name, password){
   updateRegistry();
   showApp();
 
-  // Play cute anime girl welcome voice upon entering system
-  playAnimeWelcomeVoice(name);
+  // Play natural Tamil human girl voice welcome speech
+  playTamilWelcomeVoice(name);
 
   if(db){
     if(unsubHunter) unsubHunter();
