@@ -250,6 +250,24 @@ function spawnParticles(x, y) {
   }
 }
 
+/* ANIME GIRL VOICE WELCOME SPEECH */
+function playAnimeWelcomeVoice(name){
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // Stop any ongoing speech
+    let utterance = new SpeechSynthesisUtterance(`Welcome back, Hunter ${name}! Let's clear our daily quests today!`);
+    utterance.rate = 1.15; // Slightly faster for energetic anime girl vibe
+    utterance.pitch = 1.6; // High pitch for cute anime girl voice tone
+    utterance.volume = 1.0;
+
+    // Try to pick a female/cute voice if available in the browser
+    let voices = window.speechSynthesis.getVoices();
+    let femaleVoice = voices.find(v => v.name.includes('Google UK English Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Zira') || v.lang.includes('en'));
+    if(femaleVoice) utterance.voice = femaleVoice;
+
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
 /* ADVANCED WEB AUDIO SYNTHESIZER */
 let audioCtx = null;
 function initAudio(){
@@ -431,6 +449,9 @@ function setupProfileData(name, password){
   localStorage.setItem(profileKey(name), JSON.stringify(data));
   updateRegistry();
   showApp();
+
+  // Play cute anime girl welcome voice upon entering system
+  playAnimeWelcomeVoice(name);
 
   if(db){
     if(unsubHunter) unsubHunter();
