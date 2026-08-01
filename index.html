@@ -89,7 +89,10 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 .heatmap-day.missed{border-color:var(--danger);background:rgba(255,84,104,.08);}
 .heatmap-date{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-faint);margin-bottom:4px;}
 .heatmap-status{font-size:12px;}
-.cal-icon{cursor:pointer;font-size:15px;padding:2px 6px;border:1px solid var(--border-bright);background:rgba(74,168,255,.06);border-radius:2px;}
+
+/* MODERN SVG CALENDAR ICON */
+.cal-icon-btn{cursor:pointer;background:rgba(74,168,255,.06);border:1px solid var(--border-bright);padding:4px 7px;display:flex;align-items:center;justify-content:center;border-radius:3px;transition:all 0.2s;}
+.cal-icon-btn:hover{background:rgba(74,168,255,.18);border-color:var(--accent);}
 
 /* CALENDAR MODAL STYLES */
 .cal-select-row{display:flex;gap:8px;margin-bottom:12px;}
@@ -156,7 +159,17 @@ body.penalty-mode .hud-frame { background:linear-gradient(180deg,rgba(36,8,8,.9)
 </div>
 <div class="panel hud-frame">
   <div class="c3"></div><div class="c4"></div>
-  <p class="panel-title">WEEKLY <b>STREAK HEATMAP</b> <span class="cal-icon" id="openCalModalBtn" title="Open Calendar">📅</span></p>
+  <p class="panel-title">
+    WEEKLY <b>STREAK HEATMAP</b>
+    <span class="cal-icon-btn" id="openCalModalBtn" title="Open Calendar">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4aa8ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="16" y1="2" x2="16" y2="6"></line>
+        <line x1="8" y1="2" x2="8" y2="6"></line>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+    </span>
+  </p>
   <div class="heatmap-grid" id="heatmapGrid"></div>
 </div>
 <div class="panel hud-frame"><div class="c3"></div><div class="c4"></div><p class="panel-title">QUEST <b>PROGRESS</b></p><div class="deadlinerow"><div class="deadline-label">Deadline<b>10:00 PM IST Tonight</b></div><div class="deadline-clock" id="deadlineClock">--:--:--</div></div><div class="progress-count" id="progressCount">0 / 0 quests cleared today</div><div id="statusQuestList"></div></div>
