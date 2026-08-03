@@ -407,7 +407,7 @@ function fmtHMS(ms){ms=Math.max(0,ms);let h=Math.floor(ms/36e5),m=Math.floor(ms%
 function formatDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return d.toLocaleDateString('en-IN',{month:'short',day:'numeric',year:'numeric'})}
 function daysSince(s){if(!s)return 0;const a=new Date(s+'T00:00:00'),b=new Date(todayStr()+'T00:00:00');return Math.max(1,Math.floor((b-a)/86400000)+1)}
 function redistributeXP(){const n=data.quests.length;if(!n)return;const base=Math.floor(100/n),rem=100-base*n;data.quests.forEach((q,i)=>q.xp=base+(i<rem?1:0))}
-function defaultData(name, pass=""){const t=todayStr();return{playerName:name,password:pass,level:1,xp:0,xpToNext:100,lastLeveledDate:null,quests:[{id:cid(),name:'Workout / Training',xp:25,icon:'💪',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Study Session',xp:25,icon:'📖',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Sleep 7+ Hours',xp:25,icon:'🌙',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Meditate / Focus',icon:'🧘',xp:25,streak:0,totalDays:0,completedToday:false,startDate:t}],lastActiveDate:t,warningShownDate:null,deadlineAlertShownDate:null,morningAlertShownDate:null,history:{},log:[{date:t,text:'System initialized. Welcome, '+name+'.',type:'normal'}]}}
+function defaultData(name, pass=""){const t=todayStr();return{playerName:name,password:pass,level:1,xp:0,totalXP:0,xpToNext:100,lastLeveledDate:null,quests:[{id:cid(),name:'Workout / Training',xp:25,icon:'💪',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Study Session',xp:25,icon:'📖',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Sleep 7+ Hours',xp:25,icon:'🌙',streak:0,totalDays:0,completedToday:false,startDate:t},{id:cid(),name:'Meditate / Focus',icon:'🧘',xp:25,streak:0,totalDays:0,completedToday:false,startDate:t}],lastActiveDate:t,warningShownDate:null,deadlineAlertShownDate:null,morningAlertShownDate:null,history:{},log:[{date:t,text:'System initialized. Welcome, '+name+'.',type:'normal'}]}}
 function safeParse(v,f){try{return JSON.parse(v)}catch(e){return f}}
 
 function rankFor(l){
@@ -491,6 +491,7 @@ function loadProfile(name, password=""){
 function setupProfileData(name, password){
   if(!data.password && password) data.password = password;
   data.playerName=name; data.xpToNext=100; data.lastLeveledDate=data.lastLeveledDate||null;
+  data.totalXP = data.totalXP || 0;
   data.quests=(data.quests||[]).map(q=>({...q,id:q.id||cid(),xp:q.xp||0,icon:q.icon||'🎯',streak:q.streak||0,totalDays:q.totalDays||0,completedToday:!!q.completedToday,startDate:q.startDate||todayStr()}));
   data.lastActiveDate=data.lastActiveDate||todayStr(); data.log=data.log||[]; data.history=data.history||{}; ensureJournal();
   data.warningShownDate=data.warningShownDate||null; data.deadlineAlertShownDate=data.deadlineAlertShownDate||null; data.morningAlertShownDate=data.morningAlertShownDate||null;
@@ -545,6 +546,7 @@ function resetTodayData(){
   if(!data) return; const t = todayStr(); let todayXPGained = 0;
   data.quests.forEach(q => { if(q.completedToday){ todayXPGained += q.xp; q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); } });
   if(data.lastLeveledDate === t){ data.level = Math.max(1, data.level - 1); data.xp = Math.max(0, 100 - todayXPGained); data.lastLeveledDate = null; } else { data.xp = Math.max(0, data.xp - todayXPGained); }
+  data.totalXP = Math.max(0, (data.totalXP || 0) - todayXPGained);
   if(data.history) delete data.history[t]; if(data.journal) delete data.journal[t];
   data.warningShownDate = null; data.deadlineAlertShownDate = null; data.morningAlertShownDate = null;
   if(data.log) data.log = data.log.filter(l => l.date !== t); else data.log = [];
@@ -562,7 +564,9 @@ function applyDailyReset(){
 }
 
 function gainXP(a){
-  data.xp += a; let up = false, oldRank = rankFor(data.level).r;
+  data.xp += a;
+  data.totalXP = (data.totalXP || 0) + a;
+  let up = false, oldRank = rankFor(data.level).r;
   if(data.xp >= 100){ 
     data.xp = 0; 
     data.level++; 
@@ -579,7 +583,7 @@ function completeQuest(id, evt){
   if(q.completedToday && isAllCurrentlyCompleted){ playSound('alert'); showSysWindow({ tag:'[ SYSTEM LOCKED ]', title:'QUESTS LOCKED', tone:'danger', body:'<b>ALL QUESTS CLEARED TODAY!</b><br>Unchecking is locked. Resets tomorrow.' }); return; }
 
   if(q.completedToday){
-    q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); data.xp = Math.max(0, data.xp - q.xp); delete data.history[todayStr()];
+    q.completedToday = false; q.streak = Math.max(0, q.streak - 1); q.totalDays = Math.max(0, q.totalDays - 1); data.xp = Math.max(0, data.xp - q.xp); data.totalXP = Math.max(0, (data.totalXP || 0) - q.xp); delete data.history[todayStr()];
     data.log.unshift({date:todayStr(),text:`Unchecked "${q.name}" — -${q.xp} XP`,type:'penalty'}); data.log=data.log.slice(0,40);
     saveData(); renderQuests(); renderStatus(); renderHeatmap(); playSound('alert'); return;
   }
@@ -758,10 +762,9 @@ function updateXPBarUI(level, xpVal, maxXP){
   document.getElementById('xpLabel').textContent = `${xpVal} / 100`; 
   document.getElementById('xpFill').style.width = Math.min(100, (xpVal / 100) * 100) + '%';
   
-  // Calculate total cumulative XP across all levels and current level XP
-  let totalCumulativeXP = ((level - 1) * 100) + xpVal;
+  // Display continuous cumulative total XP under Harsha
   const totalXpSubEl = document.getElementById('totalXpSub');
-  if(totalXpSubEl) totalXpSubEl.textContent = `Total XP: ${totalCumulativeXP}`;
+  if(totalXpSubEl) totalXpSubEl.textContent = `Total XP: ${data.totalXP || 0}`;
 
   renderLeaderboard();
 }
