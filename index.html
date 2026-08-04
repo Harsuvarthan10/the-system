@@ -577,7 +577,10 @@ function gainXP(a){
 }
 
 function completeQuest(id, evt){
-  const q=data.quests.find(x=>x.id===id); if(!q)return; const now=istNow();
+  const now=istNow();
+  if(now.getHours()>=DEADLINE_HOUR){ playSound('alert'); showSysWindow({tag:'[ SYSTEM ]',title:'TOO LATE',tone:'danger',body:'The 10:00 PM IST deadline has passed.<br>This quest cannot be counted for today.'}); return; }
+
+  const q=data.quests.find(x=>x.id===id); if(!q)return;
   const isAllCurrentlyCompleted = data.quests.length > 0 && data.quests.every(quest => quest.completedToday);
 
   if(q.completedToday && isAllCurrentlyCompleted){ playSound('alert'); showSysWindow({ tag:'[ SYSTEM LOCKED ]', title:'QUESTS LOCKED', tone:'danger', body:'<b>ALL QUESTS CLEARED TODAY!</b><br>Unchecking is locked. Resets tomorrow.' }); return; }
@@ -587,8 +590,6 @@ function completeQuest(id, evt){
     data.log.unshift({date:todayStr(),text:`Unchecked "${q.name}" — -${q.xp} XP`,type:'penalty'}); data.log=data.log.slice(0,40);
     saveData(); renderQuests(); renderStatus(); renderHeatmap(); playSound('alert'); return;
   }
-
-  if(now.getHours()>=DEADLINE_HOUR){ playSound('alert'); showSysWindow({tag:'[ SYSTEM ]',title:'TOO LATE',tone:'danger',body:'The 10:00 PM IST deadline has passed.<br>This quest cannot be counted for today.'}); return; }
 
   q.completedToday=true; q.streak++; q.totalDays++;
   const allDone = data.quests.length > 0 && data.quests.every(quest => quest.completedToday);
@@ -762,7 +763,6 @@ function updateXPBarUI(level, xpVal, maxXP){
   document.getElementById('xpLabel').textContent = `${xpVal} / 100`; 
   document.getElementById('xpFill').style.width = Math.min(100, (xpVal / 100) * 100) + '%';
   
-  // Display continuous cumulative total XP under Harsha
   const totalXpSubEl = document.getElementById('totalXpSub');
   if(totalXpSubEl) totalXpSubEl.textContent = `Total XP: ${data.totalXP || 0}`;
 
